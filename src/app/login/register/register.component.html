@@ -55,11 +55,11 @@
 
         <div class="form-group">
             <label>User repeat password:</label>
-            <input type="password" [formControl]="repeat_password"/>
+            <input type="password" [formControl]="repeatPassword"/>
 
-            <span style="color: red;" *ngIf="registerForm.get('repeat_password').errors && (registerForm.get('repeat_password').touched || registerForm.get('repeat_password').dirty) ">
-                <span *ngIf="registerForm.get('repeat_password').errors?.required">User password is required</span>
-                <span *ngIf="registerForm.get('repeat_password').errors.minlength">El camp ha de contenir mínim 8 caràcters</span>
+            <span style="color: red;" *ngIf="registerForm.get('repeatPassword').errors && (registerForm.get('repeatPassword').touched || registerForm.get('repeatPassword').dirty) ">
+                <span *ngIf="registerForm.get('repeatPassword').errors?.required">User password is required</span>
+                <span *ngIf="registerForm.get('repeatPassword').errors.minlength">El camp ha de contenir mínim 8 caràcters</span>
             </span>
             <span style="color: red;" *ngIf="validatorEquality()">The passwords must to be equals</span>
         </div>

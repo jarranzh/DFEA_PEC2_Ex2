@@ -20,9 +20,9 @@ export class UserService {
     private messageService: MessageService
   ) { }
 
-  isLoggedIn(): boolean{
-    return false;
-  }
+  // isLoggedIn(): boolean{
+  //   return false;
+  // }
 
   getUsers(): Observable<User[]>{
     return this.http.get<User[]>(this.usersUrl)

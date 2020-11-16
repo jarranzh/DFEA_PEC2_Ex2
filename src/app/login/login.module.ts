@@ -6,6 +6,7 @@ import { RegisterComponent } from './register/register.component';
 
 @NgModule({
   declarations: [LoginComponent, RegisterComponent],
-  imports: [CommonModule, ReactiveFormsModule]
+  imports: [CommonModule, ReactiveFormsModule],
+  exports: [LoginComponent, RegisterComponent]
 })
 export class LoginModule {}

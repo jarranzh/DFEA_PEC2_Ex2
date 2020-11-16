@@ -22,7 +22,7 @@ export class RegisterComponent implements OnInit {
   public type: FormControl;
   public email: FormControl;
   public password: FormControl;
-  public repeat_password: FormControl;
+  public repeatPassword: FormControl;
   public registerForm: FormGroup;
   public message: string;
 
@@ -35,7 +35,7 @@ export class RegisterComponent implements OnInit {
     this.type = new FormControl('', [Validators.required, CheckWord.checkInvalidWord(/ /)]);
     this.email = new FormControl('', [Validators.required, Validators.pattern('^[A-Za-z0-9._%-]+@[A-Za-z0-9._%-]+\\.[a-z]{2,3}$')]);
     this.password = new FormControl('', [Validators.required, Validators.minLength(8)]);
-    this.repeat_password = new FormControl('', [Validators.required, Validators.minLength(8)]);
+    this.repeatPassword = new FormControl('', [Validators.required, Validators.minLength(8)]);
 
     this.registerForm = this.formBuilder.group({
       name: this.name,
@@ -43,7 +43,7 @@ export class RegisterComponent implements OnInit {
       type: this.type,
       email: this.email,
       password: this.password,
-      repeat_password: this.repeat_password
+      repeatPassword: this.repeatPassword
     }, {
       validators: checkEquality
     }
@@ -77,7 +77,7 @@ export class RegisterComponent implements OnInit {
 
   validatorEquality(): boolean{
     return this.registerForm.hasError('equals') && this.registerForm.get('password').dirty
-      && this.registerForm.get('repeat_password').dirty;
+      && this.registerForm.get('repeatPassword').dirty;
   }
 
 }

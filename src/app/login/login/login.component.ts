@@ -9,6 +9,9 @@ import { User } from 'src/app/Models/user';
 import { UserService } from '../../Services/user.service';
 import { Router } from '@angular/router';
 import { GlobalService } from '../../Services/global.service';
+import { Store } from '@ngrx/store';
+import { AppState } from 'src/app/app.reducer';
+import { login } from '../actions/login.actions';
 
 @Component({
   selector: 'app-login',
@@ -29,7 +32,8 @@ export class LoginComponent implements OnInit {
     private formBuilder: FormBuilder,
     private _globalService: GlobalService,
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    private store: Store<AppState>
   ) {}
 
   ngOnInit(): void {
@@ -44,6 +48,11 @@ export class LoginComponent implements OnInit {
       password: this.password
     });
     this.getUsers();
+    // this.store
+    //   .select('userLogged')
+    //   .subscribe(
+    //     userLoggedResponse => (this.user = userLoggedResponse.userLogged)
+    //   );
   }
 
   getUsers(): void {
@@ -51,6 +60,15 @@ export class LoginComponent implements OnInit {
   }
 
   public checkLogin() {
+    // this.store.dispatch(
+    //   login({
+    //     credentials: {
+    //       userEmail: this.email.value,
+    //       userPassword: this.password.value
+    //     }
+    //   })
+    // );
+    console.log(this.users);
     this.user.email = this.email.value;
     this.user.password = this.password.value;
     const obj = this.users.find(obj => obj.email === this.user.email);

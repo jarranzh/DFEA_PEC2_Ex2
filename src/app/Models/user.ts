@@ -6,7 +6,7 @@ export class User{
     type: string;
     email: string;
     password: string;
-    repeat_password: string;
+    repeatPassword: string;
     birthDate: string;
     phone: number;
     nationality: string;
