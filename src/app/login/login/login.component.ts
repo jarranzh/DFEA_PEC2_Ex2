@@ -60,14 +60,12 @@ export class LoginComponent implements OnInit {
   }
 
   public checkLogin() {
-    // this.store.dispatch(
-    //   login({
-    //     credentials: {
-    //       userEmail: this.email.value,
-    //       userPassword: this.password.value
-    //     }
-    //   })
-    // );
+    this.store.dispatch(
+      login({
+        email: this.email.value,
+        password: this.password.value
+      })
+    );
     console.log(this.users);
     this.user.email = this.email.value;
     this.user.password = this.password.value;
