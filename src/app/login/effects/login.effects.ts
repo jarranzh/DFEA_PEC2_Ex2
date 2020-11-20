@@ -1,10 +1,10 @@
-import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { LoginService } from '../services/login.service';
-import { mergeMap, map, catchError } from 'rxjs/operators';
-import { login, loginSuccess, loginFailure } from '../actions/login.actions';
 import { of } from 'rxjs';
+import { catchError, map, mergeMap } from 'rxjs/operators';
+import { login, loginFailure, loginSuccess } from '../actions/login.actions';
+import { LoginService } from '../services/login.service';
 
 @Injectable()
 export class LoginEffects {
@@ -21,12 +21,13 @@ export class LoginEffects {
         this.loginService.checkLogin(action.email, action.password).pipe(
           map(user => {
             if (user) {
+              console.log(user);
               console.log('service: credenciales correctas');
-              this.router.navigate(['/']);
+              this.router.navigate(['activityList']);
               return loginSuccess({ userLogged: user });
             } else {
               // error credenciales incorrectas
-              console.log('service: credenciales incorrectas');
+              return loginFailure({ error: 'CREDENCIALES INCORRECTAS' });
             }
           }),
           catchError(err => of(loginFailure({ error: err })))
