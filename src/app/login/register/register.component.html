@@ -61,7 +61,7 @@
                 <span *ngIf="registerForm.get('repeatPassword').errors?.required">User password is required</span>
                 <span *ngIf="registerForm.get('repeatPassword').errors.minlength">El camp ha de contenir mínim 8 caràcters</span>
             </span>
-            <span style="color: red;" *ngIf="validatorEquality()">The passwords must to be equals</span>
+            <span style="color: red;" *ngIf="validatorEquality()">Both passwords must be equal</span>
         </div>
 
         <div class="form-group">

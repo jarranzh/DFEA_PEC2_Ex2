@@ -1,6 +1,12 @@
 import { User } from 'src/app/profile/models/user.model';
 import { createReducer, on } from '@ngrx/store';
-import { login, loginSuccess, loginFailure } from '../actions/login.actions';
+import {
+  login,
+  loginSuccess,
+  loginFailure,
+  logout
+} from '../actions/login.actions';
+import { register } from '../actions/register.actions';
 
 export interface LoginState {
   userLogged: User;
@@ -28,6 +34,7 @@ const _loginReducer = createReducer(
     ...state,
     loading: false,
     loaded: true,
+    error: initialState.error,
     userLogged
   })),
 
@@ -36,6 +43,19 @@ const _loginReducer = createReducer(
     loading: false,
     loaded: false,
     error
+  })),
+
+  on(register, state => ({
+    ...state,
+    loading: true,
+    loaded: false
+  })),
+
+  on(logout, state => ({
+    ...state,
+    loading: false,
+    loaded: true,
+    userLogged: initialState.userLogged
   }))
 );
 

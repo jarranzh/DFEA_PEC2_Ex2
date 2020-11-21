@@ -1,9 +1,10 @@
+import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/app.reducer';
 import { Activity } from '../models/activity.model';
-import { User } from '../../Models/user';
 import { getActivities } from '../actions/activities.actions';
+import { User } from 'src/app/profile/models/user.model';
 
 @Component({
   selector: 'app-activity-list',
@@ -15,15 +16,20 @@ export class ActivityListComponent implements OnInit {
   user: User;
   activity: Activity[];
 
-  constructor(private store: Store<AppState>) {}
+  constructor(private store: Store<AppState>,     private router: Router
+    ) {}
 
   ngOnInit(): void {
-    this.getActivities();
     this.store
-      .select('activities')
-      .subscribe(
-        activitiesResponse => (this.activities = activitiesResponse.activities)
-      );
+    .select('activities')
+    .subscribe(
+      activitiesResponse => (this.activities = activitiesResponse.activities)
+    );
+
+    if (!this.activities) {
+      this.getActivities();
+    }
+
     this.store
       .select('userLogged')
       .subscribe(

@@ -14,7 +14,7 @@ export interface ActivitiesState {
 }
 
 export const initialState: ActivitiesState = {
-  activities: [],
+  activities: null,
   loading: false,
   loaded: false,
   error: null

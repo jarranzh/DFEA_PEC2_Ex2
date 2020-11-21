@@ -8,18 +8,18 @@ export class User {
   email: string;
   password: string;
   repeatPassword: string;
-  birthDate: string;
-  phone: number;
-  nationality: string;
-  nif: string;
-  aboutMe: string;
-  companyName: string;
-  companyDescription: string;
-  cif: string;
-  activities: Activity[];
-  favorites: Activity[];
-  education: Education[];
-  languages: Languages[];
+  birthDate?: string;
+  phone?: number;
+  nationality?: string;
+  nif?: string;
+  aboutMe?: string;
+  companyName?: string;
+  companyDescription?: string;
+  cif?: string;
+  activities?: Activity[];
+  favorites?: Activity[];
+  education?: Education[];
+  languages?: Languages[];
 }
 
 export class Education {

@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { User, Education, Languages } from 'src/app/Models/user';
 import { UserService } from 'src/app/Services/user.service';
 import { Router } from '@angular/router';
 import { GlobalService } from '../../Services/global.service';
+import { AppState } from 'src/app/app.reducer';
+import { Store } from '@ngrx/store';
+import { Education, User } from '../models/user.model';
+import { Languages } from 'src/app/Models/user';
 
 @Component({
   selector: 'app-profile',
@@ -10,7 +13,6 @@ import { GlobalService } from '../../Services/global.service';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-
   educations: Education[];
   _languages: Languages[];
   users: User[];
@@ -19,12 +21,20 @@ export class ProfileComponent implements OnInit {
   company: boolean;
   languages: Languages;
 
-  constructor(private _global: GlobalService, private router: Router, private userService: UserService) {
-    this.user = this._global.globalVar;
-   }
+  constructor(
+    private _global: GlobalService,
+    private router: Router,
+    private userService: UserService,
+    private store: Store<AppState>
+  ) {
+    this.store
+      .select('userLogged')
+      .subscribe(
+        userLoggedResponse => (this.user = userLoggedResponse.userLogged)
+      );
+  }
 
   ngOnInit(): void {
-    this.getUsers();
     if (this.user !== undefined) {
       this.getEducations();
       this.getLanguages();
@@ -34,22 +44,18 @@ export class ProfileComponent implements OnInit {
 
   getProfile() {
     if (this.user.type === 'Company') {
-      return this.company = true;
+      return (this.company = true);
     } else {
-      return this.company = false;
+      return (this.company = false);
     }
   }
 
-  getUsers(): void{
-    this.userService.getUsers()
-      .subscribe(users => this.users = users);
-  }
 
-  getEducations(): void{
+  getEducations(): void {
     this.educations = this.user.education;
   }
 
-  getLanguages(): void{
+  getLanguages(): void {
     this._languages = this.user.languages;
   }
 
@@ -62,11 +68,14 @@ export class ProfileComponent implements OnInit {
     this.router.navigateByUrl('/updateEducation');
   }
 
-  deleteEducation(education){
+  deleteEducation(education) {
     const array = this.user.education;
 
     for (let i = 0; i < array.length; i++) {
-      if ((array[i].name === education.name) && (array[i].level === education.level)) {
+      if (
+        array[i].name === education.name &&
+        array[i].level === education.level
+      ) {
         array.splice(i, 1);
       }
     }
@@ -81,11 +90,14 @@ export class ProfileComponent implements OnInit {
     this.router.navigateByUrl('/updateLanguage');
   }
 
-  deleteLanguage(_language){
+  deleteLanguage(_language) {
     const array = this.user.languages;
 
     for (let i = 0; i < array.length; i++) {
-      if ((array[i].language === _language.language) && (array[i].level === _language.level)) {
+      if (
+        array[i].language === _language.language &&
+        array[i].level === _language.level
+      ) {
         array.splice(i, 1);
       }
     }
@@ -93,6 +105,5 @@ export class ProfileComponent implements OnInit {
 
   addLanguage() {
     this.router.navigateByUrl('/addLanguage');
-   }
-
+  }
 }
