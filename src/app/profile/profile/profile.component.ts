@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from 'src/app/Services/user.service';
 import { Router } from '@angular/router';
 import { GlobalService } from '../../Services/global.service';
 import { AppState } from 'src/app/app.reducer';
 import { Store } from '@ngrx/store';
 import { Education, User } from '../models/user.model';
 import { Languages } from 'src/app/Models/user';
+import { deleteEducation } from '../actions/profile.actions';
 
 @Component({
   selector: 'app-profile',
@@ -24,7 +24,6 @@ export class ProfileComponent implements OnInit {
   constructor(
     private _global: GlobalService,
     private router: Router,
-    private userService: UserService,
     private store: Store<AppState>
   ) {
     this.store
@@ -35,10 +34,12 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.user !== undefined) {
+    if (this.user) {
       this.getEducations();
       this.getLanguages();
       this.getProfile();
+    } else {
+      this.router.navigate(['/home']);
     }
   }
 
@@ -49,7 +50,6 @@ export class ProfileComponent implements OnInit {
       return (this.company = false);
     }
   }
-
 
   getEducations(): void {
     this.educations = this.user.education;
@@ -70,15 +70,16 @@ export class ProfileComponent implements OnInit {
 
   deleteEducation(education) {
     const array = this.user.education;
+    this.store.dispatch(deleteEducation({ education }));
 
-    for (let i = 0; i < array.length; i++) {
-      if (
-        array[i].name === education.name &&
-        array[i].level === education.level
-      ) {
-        array.splice(i, 1);
-      }
-    }
+    // for (let i = 0; i < array.length; i++) {
+    //   if (
+    //     array[i].name === education.name &&
+    //     array[i].level === education.level
+    //   ) {
+    //     array.splice(i, 1);
+    //   }
+    // }
   }
 
   addEducation() {

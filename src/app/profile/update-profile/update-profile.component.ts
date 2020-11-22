@@ -5,13 +5,13 @@ import {
   FormBuilder,
   Validators
 } from '@angular/forms';
-import { UserService } from 'src/app/Services/user.service';
 import { Router } from '@angular/router';
 import { checkNIF } from 'src/app/Directives/check-nif.validator';
 import { trimValidator } from 'src/app/Directives/check-whiteSpace.validator';
 import { AppState } from 'src/app/app.reducer';
 import { Store } from '@ngrx/store';
 import { User } from '../models/user.model';
+import { updateProfile } from '../actions/profile.actions';
 
 @Component({
   selector: 'app-update-profile',
@@ -40,7 +40,6 @@ export class UpdateProfileComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
-    private userService: UserService,
     private store: Store<AppState>
   ) {
     this.store
@@ -51,99 +50,95 @@ export class UpdateProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if(!this.user) {
+    if (!this.user) {
       this.router.navigate(['/home']);
-    } else{
-    if (this.getProfile() === true) {
-      this.name = new FormControl(this.user.name, [
-        Validators.required,
-        Validators.minLength(3),
-        Validators.maxLength(55),
-        Validators.pattern('^[a-zA-Z0-9]*$')
-      ]);
-      this.surname = new FormControl(this.user.surname, [
-        Validators.minLength(3),
-        Validators.maxLength(55),
-        Validators.pattern('^[a-zA-Z0-9]*$')
-      ]);
-      this.birthdate = new FormControl(
-        this.user.birthDate,
-        Validators.pattern(this.date)
-      );
-      this.phone = new FormControl(this.user.phone);
-      this.nationality = new FormControl(this.user.nationality);
-      this.nif = new FormControl(this.user.nif);
-      this.about = new FormControl(this.user.aboutMe);
-      this.companyName = new FormControl(this.user.companyName, [
-        Validators.required,
-        Validators.minLength(3),
-        Validators.maxLength(255)
-      ]);
-      this.companyDescription = new FormControl(this.user.companyDescription);
-      this.cif = new FormControl(this.user.cif, Validators.required);
-
-      this.profileForm = this.formBuilder.group(
-        {
-          name: this.name,
-          surname: this.surname,
-          birthDate: this.birthdate,
-          phone: this.phone,
-          nationality: this.nationality,
-          nif: this.nif,
-          aboutMe: this.about,
-          companyName: this.companyName,
-          companyDescription: this.companyDescription,
-          cif: this.cif
-        },
-        {
-          validators: [checkNIF, trimValidator]
-        }
-      );
     } else {
-      this.name = new FormControl(this.user.name, [
-        Validators.required,
-        Validators.minLength(3),
-        Validators.maxLength(55),
-        Validators.pattern('^[a-zA-Z0-9]*$')
-      ]);
-      this.surname = new FormControl(this.user.surname, [
-        Validators.minLength(3),
-        Validators.maxLength(55),
-        Validators.pattern('^[a-zA-Z0-9]*$')
-      ]);
-      this.birthdate = new FormControl(
-        this.user.birthDate,
-        Validators.pattern(this.date)
-      );
-      this.phone = new FormControl(this.user.phone);
-      this.nationality = new FormControl(this.user.nationality);
-      this.nif = new FormControl(this.user.nif);
-      this.about = new FormControl(this.user.aboutMe);
+      if (this.getProfile() === true) {
+        this.name = new FormControl(this.user.name, [
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(55),
+          Validators.pattern('^[a-zA-Z0-9]*$')
+        ]);
+        this.surname = new FormControl(this.user.surname, [
+          Validators.minLength(3),
+          Validators.maxLength(55),
+          Validators.pattern('^[a-zA-Z0-9]*$')
+        ]);
+        this.birthdate = new FormControl(
+          this.user.birthDate,
+          Validators.pattern(this.date)
+        );
+        this.phone = new FormControl(this.user.phone);
+        this.nationality = new FormControl(this.user.nationality);
+        this.nif = new FormControl(this.user.nif);
+        this.about = new FormControl(this.user.aboutMe);
+        this.companyName = new FormControl(this.user.companyName, [
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(255)
+        ]);
+        this.companyDescription = new FormControl(this.user.companyDescription);
+        this.cif = new FormControl(this.user.cif, Validators.required);
 
-      this.profileForm = this.formBuilder.group(
-        {
-          name: this.name,
-          surname: this.surname,
-          birthDate: this.birthdate,
-          phone: this.phone,
-          nationality: this.nationality,
-          nif: this.nif,
-          aboutMe: this.about
-        },
-        {
-          validators: checkNIF
-        }
-      );
+        this.profileForm = this.formBuilder.group(
+          {
+            name: this.name,
+            surname: this.surname,
+            birthDate: this.birthdate,
+            phone: this.phone,
+            nationality: this.nationality,
+            nif: this.nif,
+            aboutMe: this.about,
+            companyName: this.companyName,
+            companyDescription: this.companyDescription,
+            cif: this.cif
+          },
+          {
+            validators: [checkNIF, trimValidator]
+          }
+        );
+      } else {
+        this.name = new FormControl(this.user.name, [
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(55),
+          Validators.pattern('^[a-zA-Z0-9]*$')
+        ]);
+        this.surname = new FormControl(this.user.surname, [
+          Validators.minLength(3),
+          Validators.maxLength(55),
+          Validators.pattern('^[a-zA-Z0-9]*$')
+        ]);
+        this.birthdate = new FormControl(
+          this.user.birthDate,
+          Validators.pattern(this.date)
+        );
+        this.phone = new FormControl(this.user.phone);
+        this.nationality = new FormControl(this.user.nationality);
+        this.nif = new FormControl(this.user.nif);
+        this.about = new FormControl(this.user.aboutMe);
+
+        this.profileForm = this.formBuilder.group(
+          {
+            name: this.name,
+            surname: this.surname,
+            birthDate: this.birthdate,
+            phone: this.phone,
+            nationality: this.nationality,
+            nif: this.nif,
+            aboutMe: this.about
+          },
+          {
+            validators: checkNIF
+          }
+        );
+      }
+
+      this.getProfile();
+
+      this.getInformation();
     }
-
-    // this.getUsers();
-
-    this.getProfile();
-
-    this.getInformation();
-  }
-
-    console.log(this.profileForm.valid);
   }
 
   getProfile() {
@@ -162,37 +157,26 @@ export class UpdateProfileComponent implements OnInit {
     if (this.user.companyName === null) {
       this.user.companyName = '';
     }
-
-    console.log(this.profileForm);
-
   }
-
-  // getUsers(): void {
-  //   this.userService.getUsers().subscribe(users => (this.users = users));
-  // }
 
   updateProfile() {
     const form = this.profileForm.value as User;
-    if (this.getProfile() === true) {
-      this.user.name = form.name;
-      this.user.surname = form.surname;
-      this.user.birthDate = form.birthDate;
-      this.user.phone = form.phone;
-      this.user.nationality = form.nationality;
-      this.user.nif = form.nif;
-      this.user.aboutMe = form.aboutMe;
-      this.user.companyName = form.companyName;
-      this.user.companyDescription = form.companyDescription;
-      this.user.cif = form.cif;
-    } else {
-      this.user.name = form.name;
-      this.user.surname = form.surname;
-      this.user.birthDate = form.birthDate;
-      this.user.phone = form.phone;
-      this.user.nationality = form.nationality;
-      this.user.nif = form.nif;
-      this.user.aboutMe = form.aboutMe;
-    }
+    this.store.dispatch(
+      updateProfile({
+        profile: {
+          name: form.name,
+          surname: form.surname,
+          birthDate: form.birthDate,
+          phone: form.phone,
+          nationality: form.nationality,
+          nif: form.nif,
+          aboutMe: form.aboutMe,
+          companyName: form.companyName,
+          companyDescription: form.companyDescription,
+          cif: form.cif
+        }
+      })
+    );
     this.router.navigateByUrl('/profile');
   }
 

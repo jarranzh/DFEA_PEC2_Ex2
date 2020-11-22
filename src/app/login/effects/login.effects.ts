@@ -7,7 +7,6 @@ import { login, loginFailure, loginSuccess } from '../actions/login.actions';
 import { LoginService } from '../services/login.service';
 import { register } from '../actions/register.actions';
 import { RegisterService } from '../services/register.service';
-import { User } from 'src/app/profile/models/user.model';
 
 @Injectable()
 export class LoginEffects {
@@ -25,12 +24,9 @@ export class LoginEffects {
         this.loginService.checkLogin(action.email, action.password).pipe(
           map(user => {
             if (user) {
-              console.log(user);
-              console.log('service: credenciales correctas');
               this.router.navigate(['activityList']);
               return loginSuccess({ userLogged: user });
             } else {
-              // error credenciales incorrectas
               return loginFailure({ error: 'CREDENCIALES INCORRECTAS' });
             }
           }),
@@ -46,12 +42,7 @@ export class LoginEffects {
       mergeMap(action =>
         this.registerService
           .checkRegister(
-            action.name,
-            action.surname,
-            action.userType,
-            action.email,
-            action.password,
-            action.repeatPassword
+            action.register
           )
           .pipe(
             map(user => {
@@ -62,12 +53,12 @@ export class LoginEffects {
                 return loginSuccess({
                   userLogged: {
                     id: new Date().getTime(),
-                    name: action.name,
-                    surname: action.surname,
-                    type: action.userType,
-                    email: action.email,
-                    password: action.password,
-                    repeatPassword: action.repeatPassword
+                    name: action.register.name,
+                    surname: action.register.surname,
+                    type: action.register.userType,
+                    email: action.register.email,
+                    password: action.register.password,
+                    repeatPassword: action.register.repeatPassword
                   }
                 });
               }

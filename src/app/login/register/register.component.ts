@@ -35,8 +35,6 @@ export class RegisterComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private router: Router,
-    private userService: UserService,
     private store: Store<AppState>
   ) {}
 
@@ -82,38 +80,21 @@ export class RegisterComponent implements OnInit {
         validators: checkEquality
       }
     );
-    // this.getUsers();
   }
-
-  // getUsers(): void {
-  //   this.userService.getUsers().subscribe(users => (this.users = users));
-  // }
 
   checkRegister() {
     this.store.dispatch(
       register({
-        name: this.name.value,
-        surname: this.surname.value,
-        userType: this.type.value,
-        email: this.email.value,
-        password: this.password.value,
-        repeatPassword: this.repeatPassword.value
+        register: {
+          name: this.name.value,
+          surname: this.surname.value,
+          userType: this.type.value,
+          email: this.email.value,
+          password: this.password.value,
+          repeatPassword: this.repeatPassword.value
+        }
       })
     );
-
-    // this.user.email = this.email.value;
-    // const obj = this.users.find(obj => obj.email === this.user.email);
-
-    // if (obj == null) {
-    //   this.userService
-    //     .addUser(this.registerForm.value as User)
-    //     .subscribe(user => {
-    //       this.users.push(user);
-    //       console.log('Successfully registered');
-    //     });
-    // } else {
-    //   this.message = 'El correu electrònic ja està registrat al sistema';
-    // }
   }
 
   validatorEquality(): boolean {

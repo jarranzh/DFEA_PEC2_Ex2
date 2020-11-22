@@ -1,4 +1,3 @@
-import { User } from './profile/models/user.model';
 import * as LoginReducer from './login/reducers';
 import * as ActivitiesReducer from './activities/reducers';
 import { ActionReducerMap } from '@ngrx/store';
