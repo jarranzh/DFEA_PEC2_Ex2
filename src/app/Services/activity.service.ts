@@ -1,16 +1,14 @@
-import { Injectable } from '@angular/core';
-import { Activity } from './../Models/activity';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
+import { Activity } from '../activities/models/activity.model';
 import { MessageService } from './message.service';
 
 @Injectable({
   providedIn: 'root'
 })
-
 export class ActivityService {
-
   private activitiesUrl = 'api/activities';
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -19,17 +17,16 @@ export class ActivityService {
   constructor(
     private http: HttpClient,
     private messageService: MessageService
-  ) { }
+  ) {}
 
-  getActivities(): Observable<Activity[]>{
-    return this.http.get<Activity[]>(this.activitiesUrl)
-      .pipe(
-        tap(_=>this.log('fetched activities')),
-        catchError(this.handleError<Activity[]>('getActivities', []))
-      );
+  getActivities(): Observable<Activity[]> {
+    return this.http.get<Activity[]>(this.activitiesUrl).pipe(
+      tap(_ => this.log('fetched activities')),
+      catchError(this.handleError<Activity[]>('getActivities', []))
+    );
   }
 
-  getActivity(id: number): Observable<Activity>{
+  getActivity(id: number): Observable<Activity> {
     const url = `${this.activitiesUrl}/${id}`;
     return this.http.get<Activity>(url).pipe(
       tap(_ => this.log(`fetched activity id=${id}`)),
@@ -37,21 +34,25 @@ export class ActivityService {
     );
   }
 
-  updateActivity(activity: Activity): Observable<any>{
+  updateActivity(activity: Activity): Observable<any> {
     return this.http.put(this.activitiesUrl, activity, this.httpOptions).pipe(
       tap(_ => this.log(`updated activity id=${activity.id}`)),
       catchError(this.handleError<any>('updateActivity'))
     );
   }
 
-  addActivity(activity: Activity): Observable<Activity>{
-    return this.http.post<Activity>(this.activitiesUrl, activity, this.httpOptions).pipe(
-      tap((newActivity: Activity) => this.log(`added activity w/ id=${newActivity.id}`)),
-      catchError(this.handleError<Activity>('addActivity'))
-    );
+  addActivity(activity: Activity): Observable<Activity> {
+    return this.http
+      .post<Activity>(this.activitiesUrl, activity, this.httpOptions)
+      .pipe(
+        tap((newActivity: Activity) =>
+          this.log(`added activity w/ id=${newActivity.id}`)
+        ),
+        catchError(this.handleError<Activity>('addActivity'))
+      );
   }
 
-  deleteActivity(activity: Activity | number): Observable<Activity>{
+  deleteActivity(activity: Activity | number): Observable<Activity> {
     const id = typeof activity === 'number' ? activity : activity.id;
     const url = `${this.activitiesUrl}/${id}`;
 
@@ -72,6 +73,4 @@ export class ActivityService {
       return of(result as T);
     };
   }
-
 }
-

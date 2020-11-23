@@ -16,6 +16,7 @@ import { User } from 'src/app/profile/models/user.model';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
+  public login;
   public user: User = new User();
   public email: FormControl;
   public password: FormControl;
@@ -41,16 +42,12 @@ export class LoginComponent implements OnInit {
     });
 
     this.store
-      .select('userLogged')
-      .subscribe(
-        userLoggedResponse => (this.user = userLoggedResponse.userLogged)
-      );
+      .select('login')
+      .subscribe(loginResponse => (this.login = loginResponse.userLogged));
 
     this.store
-      .select('userLogged')
-      .subscribe(
-        userLoggedResponse => (this.message = userLoggedResponse.error)
-      );
+      .select('login')
+      .subscribe(loginResponse => (this.message = loginResponse.error));
   }
 
   public checkLogin() {

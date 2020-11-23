@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { User } from 'src/app/Models/user';
-import { Activity } from 'src/app/Models/activity';
-import { UserService } from 'src/app/Services/user.service';
-import { ActivityService } from 'src/app/Services/activity.service';
 import { Router } from '@angular/router';
+import { Activity } from 'src/app/activities/models/activity.model';
+import { ActivityService } from 'src/app/Services/activity.service';
+import { UserService } from 'src/app/Services/user.service';
 import { GlobalService } from '../../Services/global.service';
+import { User } from '../models/user.model';
 
 @Component({
   selector: 'app-admin',
@@ -12,32 +12,32 @@ import { GlobalService } from '../../Services/global.service';
   styleUrls: ['./admin.component.css']
 })
 export class AdminComponent implements OnInit {
-
- activities: Activity[];
+  activities: Activity[];
   users: User[];
   user: User;
   activity: Activity;
 
-  constructor(private _global: GlobalService, private router: Router, 
-              private activityService: ActivityService, private userService: UserService) {
-
+  constructor(
+    private _global: GlobalService,
+    private router: Router,
+    private activityService: ActivityService,
+    private userService: UserService
+  ) {
     this.user = this._global.globalVar;
-   }
+  }
 
   ngOnInit(): void {
-
     if (this.user !== undefined) {
       this.getUsers();
       this.getActivities();
     }
   }
 
-  getUsers(): void{
-    this.userService.getUsers()
-      .subscribe(users => this.users = users);
+  getUsers(): void {
+    this.userService.getUsers().subscribe(users => (this.users = users));
   }
 
-  getActivities(): void{
+  getActivities(): void {
     this.activities = this.user.activities;
   }
 
@@ -46,11 +46,11 @@ export class AdminComponent implements OnInit {
     this.router.navigateByUrl('/updateActivity');
   }
 
-  deleteActivity(activity: Activity): void{
+  deleteActivity(activity: Activity): void {
     const array = this.user.activities;
 
     for (let i = 0; i < array.length; i++) {
-      if ((array[i].id === activity.id)) {
+      if (array[i].id === activity.id) {
         array.splice(i, 1);
       }
     }
@@ -61,5 +61,4 @@ export class AdminComponent implements OnInit {
   addActivity() {
     this.router.navigateByUrl('/newActivity');
   }
-
 }

@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { GlobalService } from '../../Services/global.service';
-import { AppState } from 'src/app/app.reducer';
 import { Store } from '@ngrx/store';
-import { Education, User } from '../models/user.model';
-import { Languages } from 'src/app/Models/user';
+import { AppState } from 'src/app/app.reducer';
+import { GlobalService } from '../../Services/global.service';
 import { deleteEducation } from '../actions/profile.actions';
+import { Education, Languages, User } from '../models/user.model';
 
 @Component({
   selector: 'app-profile',
@@ -13,6 +12,7 @@ import { deleteEducation } from '../actions/profile.actions';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
+  login;
   educations: Education[];
   _languages: Languages[];
   users: User[];
@@ -27,10 +27,8 @@ export class ProfileComponent implements OnInit {
     private store: Store<AppState>
   ) {
     this.store
-      .select('userLogged')
-      .subscribe(
-        userLoggedResponse => (this.user = userLoggedResponse.userLogged)
-      );
+      .select('login')
+      .subscribe(loginResponse => (this.login = loginResponse.userLogged));
   }
 
   ngOnInit(): void {

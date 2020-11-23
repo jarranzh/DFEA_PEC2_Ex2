@@ -14,7 +14,7 @@ import { AddLanguageComponent } from './profile/add-language/add-language.compon
 import { UpdateLanguageComponent } from './profile/update-language/update-language.component';
 import { MyActivitiesComponent } from './activities/my-activities/my-activities.component';
 import { MyActivitiesDetailsComponent } from './activities/my-activities-details/my-activities-details.component';
-import { AdminComponent } from './components/admin/admin.component';
+import { AdminComponent } from './profile/admin/admin.component';
 import { UpdateActivityComponent } from './activities/update-activity/update-activity.component';
 import { FavoritesComponent } from './activities/favorites/favorites.component';
 

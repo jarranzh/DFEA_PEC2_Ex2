@@ -7,7 +7,7 @@ import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { InMemoryDataService } from './Services/in-memory-data.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MessagesComponent } from './messages/messages.component';
-import { AdminComponent } from './components/admin/admin.component';
+import { AdminComponent } from './profile/admin/admin.component';
 import { LoginModule } from './login/login.module';
 import { ProfileModule } from './profile/profile.module';
 import { ActivitiesModule } from './activities/activities.module';

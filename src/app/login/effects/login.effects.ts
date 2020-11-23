@@ -4,8 +4,8 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
 import { catchError, map, mergeMap } from 'rxjs/operators';
 import { login, loginFailure, loginSuccess } from '../actions/login.actions';
-import { LoginService } from '../services/login.service';
 import { register } from '../actions/register.actions';
+import { LoginService } from '../services/login.service';
 import { RegisterService } from '../services/register.service';
 
 @Injectable()
@@ -25,7 +25,11 @@ export class LoginEffects {
           map(user => {
             if (user) {
               this.router.navigate(['activityList']);
-              return loginSuccess({ userLogged: user });
+              return loginSuccess({
+                email: user.email,
+                password: user.password,
+                userType: user.type
+              });
             } else {
               return loginFailure({ error: 'CREDENCIALES INCORRECTAS' });
             }
@@ -40,31 +44,21 @@ export class LoginEffects {
     this.actions$.pipe(
       ofType(register),
       mergeMap(action =>
-        this.registerService
-          .checkRegister(
-            action.register
-          )
-          .pipe(
-            map(user => {
-              if (user) {
-                return loginFailure({ error: 'ESTE EMAIL YA EXISTE EN LA BD' });
-              } else {
-                this.router.navigate(['activityList']);
-                return loginSuccess({
-                  userLogged: {
-                    id: new Date().getTime(),
-                    name: action.register.name,
-                    surname: action.register.surname,
-                    type: action.register.userType,
-                    email: action.register.email,
-                    password: action.register.password,
-                    repeatPassword: action.register.repeatPassword
-                  }
-                });
-              }
-            }),
-            catchError(err => of(loginFailure({ error: err })))
-          )
+        this.registerService.checkRegister(action.register).pipe(
+          map(user => {
+            if (user) {
+              return loginFailure({ error: 'ESTE EMAIL YA EXISTE EN LA BD' });
+            } else {
+              this.router.navigate(['activityList']);
+              return loginSuccess({
+                email: action.register.email,
+                password: action.register.password,
+                userType: user.type
+              });
+            }
+          }),
+          catchError(err => of(loginFailure({ error: err })))
+        )
       )
     )
   );

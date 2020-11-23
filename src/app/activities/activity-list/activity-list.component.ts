@@ -5,6 +5,12 @@ import { AppState } from 'src/app/app.reducer';
 import { Activity } from '../models/activity.model';
 import { getActivities } from '../actions/activities.actions';
 import { User } from 'src/app/profile/models/user.model';
+import {
+  getProfile,
+  getProfileFailure
+} from 'src/app/profile/actions/profile.actions';
+import { Profile } from 'src/app/profile/models/profile.model';
+import { LoginState } from 'src/app/login/reducers';
 
 @Component({
   selector: 'app-activity-list',
@@ -12,29 +18,35 @@ import { User } from 'src/app/profile/models/user.model';
   styleUrls: ['./activity-list.component.css']
 })
 export class ActivityListComponent implements OnInit {
+  loginState: LoginState;
+  login;
   activities: Activity[];
   user: User;
+  userProfile: Profile;
   activity: Activity[];
 
-  constructor(private store: Store<AppState>,     private router: Router
-    ) {}
+  constructor(private store: Store<AppState>, private router: Router) {}
 
   ngOnInit(): void {
     this.store
-    .select('activities')
-    .subscribe(
-      activitiesResponse => (this.activities = activitiesResponse.activities)
-    );
+      .select('activities')
+      .subscribe(
+        activitiesResponse => (this.activities = activitiesResponse.activities)
+      );
 
     if (!this.activities) {
       this.getActivities();
     }
 
     this.store
-      .select('userLogged')
-      .subscribe(
-        userLoggedResponse => (this.user = userLoggedResponse.userLogged)
-      );
+      .select('user')
+      .subscribe(userResponse => (this.userProfile = userResponse.userProfile));
+
+    if (this.login.email) {
+      console.log(this.user);
+      console.log('DISPATCH GET PROFILE');
+      this.store.dispatch(getProfile({ email: this.user.email }));
+    }
     this.setPageHeader();
   }
 
@@ -43,7 +55,12 @@ export class ActivityListComponent implements OnInit {
   }
 
   public setPageHeader = () => {
-    if (this.user?.type === 'Tourist') {
+    this.store
+      .select('login')
+      .subscribe(loginResponse => (this.login = loginResponse.userLogged));
+
+    console.log(this.login);
+    if (this.login?.userType === 'Tourist') {
       document.getElementById('logout').style.display = 'inline';
       document.getElementById('home').style.display = 'inline';
       document.getElementById('favorites').style.display = 'inline';
@@ -51,7 +68,7 @@ export class ActivityListComponent implements OnInit {
       document.getElementById('profile').style.display = 'inline';
       document.getElementById('login').style.display = 'none';
       document.getElementById('register').style.display = 'none';
-    } else if (this.user?.type === 'Company') {
+    } else if (this.login?.userType === 'Company') {
       document.getElementById('logout').style.display = 'inline';
       document.getElementById('login').style.display = 'none';
       document.getElementById('register').style.display = 'none';

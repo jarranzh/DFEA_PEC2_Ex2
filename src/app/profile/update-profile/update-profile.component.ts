@@ -20,7 +20,7 @@ import { updateProfile } from '../actions/profile.actions';
 })
 export class UpdateProfileComponent implements OnInit {
   users: User[];
-
+  login;
   public user: User = new User();
 
   public name: FormControl;
@@ -43,10 +43,8 @@ export class UpdateProfileComponent implements OnInit {
     private store: Store<AppState>
   ) {
     this.store
-      .select('userLogged')
-      .subscribe(
-        userLoggedResponse => (this.user = userLoggedResponse.userLogged)
-      );
+      .select('login')
+      .subscribe(loginResponse => (this.login = loginResponse.userLogged));
   }
 
   ngOnInit(): void {

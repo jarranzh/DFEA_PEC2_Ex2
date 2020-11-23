@@ -1,18 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import {
+  FormBuilder,
   FormControl,
   FormGroup,
-  FormBuilder,
   Validators
 } from '@angular/forms';
-import { CheckWord } from 'src/app/Directives/check-word.validator';
-import { checkEquality } from 'src/app/Directives/check-equality.validator';
-import { User } from 'src/app/Models/user';
-import { UserService } from 'src/app/Services/user.service';
-import { Router } from '@angular/router';
-import { AppState } from 'src/app/app.reducer';
-import { register } from '../actions/register.actions';
 import { Store } from '@ngrx/store';
+import { AppState } from 'src/app/app.reducer';
+import { checkEquality } from 'src/app/Directives/check-equality.validator';
+import { CheckWord } from 'src/app/Directives/check-word.validator';
+import { User } from 'src/app/profile/models/user.model';
+import { register } from '../actions/register.actions';
 
 @Component({
   selector: 'app-register',
