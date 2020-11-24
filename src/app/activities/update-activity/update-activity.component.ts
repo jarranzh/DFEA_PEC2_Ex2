@@ -6,10 +6,15 @@ import {
   Validators
 } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { AppState } from 'src/app/app.reducer';
+import { updateUserActivities } from 'src/app/profile/actions/profile.actions';
+import { Profile } from 'src/app/profile/models/profile.model';
 import { User } from 'src/app/profile/models/user.model';
 import { GlobalService } from 'src/app/Services/global.service';
 import { UserService } from 'src/app/Services/user.service';
 import { ActivityService } from '../../Services/activity.service';
+import { updateActivity } from '../actions/activities.actions';
 import { Activity } from '../models/activity.model';
 @Component({
   selector: 'app-update-activity',
@@ -17,8 +22,9 @@ import { Activity } from '../models/activity.model';
   styleUrls: ['./update-activity.component.css']
 })
 export class UpdateActivityComponent implements OnInit {
-  public user: User;
-  users: User[];
+  public user: Profile;
+  login;
+  // users: User[];
   activities: Activity[];
 
   public activity: Activity;
@@ -42,96 +48,115 @@ export class UpdateActivityComponent implements OnInit {
     private userService: UserService,
     private _global: GlobalService,
     private formBuilder: FormBuilder,
-    private activityService: ActivityService
+    private activityService: ActivityService,
+    private store: Store<AppState>
   ) {
-    this.user = this._global.globalVar;
+    this.store
+      .select('login')
+      .subscribe(loginResponse => (this.login = loginResponse.userLogged));
+
+    this.store
+      .select('user')
+      .subscribe(userResponse => (this.user = userResponse.userProfile));
+
     this.activity = this._global.globalActivity;
   }
 
   ngOnInit(): void {
-    this.name = new FormControl(this.activity.name, [
-      Validators.required,
-      Validators.minLength(3),
-      Validators.maxLength(55)
-    ]);
-    this.category = new FormControl(
-      this.activity.category,
-      Validators.required
-    );
-    this.subcategory = new FormControl(
-      this.activity.subcategory,
-      Validators.required
-    );
-    this.description = new FormControl(this.activity.description);
-    this.language = new FormControl(this.activity.language);
-    this.date = new FormControl(
-      this.activity.date,
-      Validators.pattern(this.datePattern)
-    );
-    this.price = new FormControl(this.activity.price, [
-      Validators.required,
-      Validators.min(0)
-    ]);
-    this.minCapacity = new FormControl(this.activity.minCapacity, [
-      Validators.required,
-      Validators.min(0)
-    ]);
-    this.limitCapacity = new FormControl(this.activity.limitCapacity, [
-      Validators.required,
-      Validators.min(0)
-    ]);
-    this.peopleRegistered = this.activity.peopleRegistered;
-    this.state = this.activity.state;
+    if (this.login) {
+      this.name = new FormControl(this.activity.name, [
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(55)
+      ]);
+      this.category = new FormControl(
+        this.activity.category,
+        Validators.required
+      );
+      this.subcategory = new FormControl(
+        this.activity.subcategory,
+        Validators.required
+      );
+      this.description = new FormControl(this.activity.description);
+      this.language = new FormControl(this.activity.language);
+      this.date = new FormControl(
+        this.activity.date,
+        Validators.pattern(this.datePattern)
+      );
+      this.price = new FormControl(this.activity.price, [
+        Validators.required,
+        Validators.min(0)
+      ]);
+      this.minCapacity = new FormControl(this.activity.minCapacity, [
+        Validators.required,
+        Validators.min(0)
+      ]);
+      this.limitCapacity = new FormControl(this.activity.limitCapacity, [
+        Validators.required,
+        Validators.min(0)
+      ]);
+      this.peopleRegistered = this.activity.peopleRegistered;
+      this.state = this.activity.state;
 
-    this.updateActivityForm = this.formBuilder.group({
-      name: this.name,
-      category: this.category,
-      subcategory: this.subcategory,
-      description: this.description,
-      language: this.language,
-      date: this.date,
-      price: this.price,
-      minCapacity: this.minCapacity,
-      limitCapacity: this.limitCapacity,
-      state: this.state,
-      peopleRegistered: this.peopleRegistered
-    });
+      this.updateActivityForm = this.formBuilder.group({
+        name: this.name,
+        category: this.category,
+        subcategory: this.subcategory,
+        description: this.description,
+        language: this.language,
+        date: this.date,
+        price: this.price,
+        minCapacity: this.minCapacity,
+        limitCapacity: this.limitCapacity,
+        state: this.state,
+        peopleRegistered: this.peopleRegistered
+      });
 
-    this.getActivities();
-    this.getUsers();
-  }
-
-  getUsers(): void {
-    this.userService.getUsers().subscribe(users => (this.users = users));
+      this.getActivities();
+    } else {
+      this.router.navigate(['/']);
+    }
   }
 
   getActivities(): void {
-    this.activityService
-      .getActivities()
-      .subscribe(activities => (this.activities = activities));
+    this.store
+      .select('activities')
+      .subscribe(
+        activitiesResponse => (this.activities = activitiesResponse.activities)
+      );
   }
-
+  //TODO: REDIRECT TO HOME WHEN NO USER LOGGED
   updateActivity() {
     const form = this.updateActivityForm.value as Activity;
 
     form.state = this.state;
 
-    const array = this.user.activities;
+    this.store.dispatch(
+      updateActivity({
+        activityId: this.activity.id,
+        activity: { id: this.activity.id, ...form }
+      })
+    );
 
-    for (let i = 0; i < array.length; i++) {
-      if (array[i].id === this.activity.id) {
-        array.splice(i, 1);
-      }
-    }
+    this.store.dispatch(updateUserActivities({ activities: this.activities }));
+    this.router.navigateByUrl('/admin');
 
-    this.activities = this.activities.filter(a => a !== this.activity);
-    this.activityService.deleteActivity(this.activity).subscribe();
+    // const array = this.user.activities;
 
-    this.activityService.addActivity(form).subscribe(form => {
-      this.activities.push(form);
-      this.user.activities = [...this.user.activities, form];
-      this.router.navigateByUrl('/admin');
-    });
+    // for (let i = 0; i < array.length; i++) {
+    //   if (array[i].id === this.activity.id) {
+    //     array.splice(i, 1);
+    //   }
+    // }
+
+    // this.activities = this.activities.filter(a => a !== this.activity);
+    // this.activityService.deleteActivity(this.activity).subscribe();
+
+    // this.activityService.addActivity(form).subscribe(form => {
+    //   this.activities.push(form);
+    //   this.user.activities = [...this.user.activities, form];
+    //   this.router.navigateByUrl('/admin');
+    // });
   }
 
   calculateState() {

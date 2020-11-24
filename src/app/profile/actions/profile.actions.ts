@@ -1,4 +1,5 @@
 import { createAction, props } from '@ngrx/store';
+import { Activity } from 'src/app/activities/models/activity.model';
 import { Profile } from '../models/profile.model';
 import { Education, Language, User } from '../models/user.model';
 
@@ -50,4 +51,9 @@ export const addLanguage = createAction(
 export const deleteLanguage = createAction(
   '[LANGUAGE] Delete Language',
   props<{ language: Language }>()
+);
+
+export const updateUserActivities = createAction(
+  '[PROFILE] Update User Activities',
+  props<{ activities: Activity[] }>()
 );

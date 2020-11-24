@@ -17,7 +17,6 @@ export class ProfileComponent implements OnInit {
   educations: Education[];
   languages: Language[];
   user: Profile;
-  // education: Education;
   company: boolean;
 
   constructor(
@@ -27,15 +26,14 @@ export class ProfileComponent implements OnInit {
   ) {
     this.store
       .select('login')
-      .subscribe(loginResponse => (this.login = loginResponse.userLogged));
+      .subscribe(response => (this.login = response.userLogged));
 
     this.store
       .select('user')
-      .subscribe(loginResponse => (this.user = loginResponse.userProfile));
+      .subscribe(response => (this.user = response.userProfile));
   }
 
   ngOnInit(): void {
-    console.log(this.login);
     if (this.login) {
       this.getEducations();
       this.getLanguages();
@@ -57,15 +55,12 @@ export class ProfileComponent implements OnInit {
     this.store
       .select('user')
       .subscribe(loginResponse => (this.educations = loginResponse.education));
-
-    console.log(this.educations);
   }
 
   getLanguages(): void {
     this.store
       .select('user')
       .subscribe(loginResponse => (this.languages = loginResponse.languages));
-    console.log(this.languages);
   }
 
   updateProfile() {
@@ -78,7 +73,10 @@ export class ProfileComponent implements OnInit {
   }
 
   deleteEducation(education) {
-    this.store.dispatch(deleteEducation({ education }));
+    const confirmDelete = confirm('¿Quieres eliminar esta educación?');
+    if (confirmDelete) {
+      this.store.dispatch(deleteEducation({ education }));
+    } else return;
   }
 
   addEducation() {
@@ -91,7 +89,10 @@ export class ProfileComponent implements OnInit {
   }
 
   deleteLanguage(language) {
-    this.store.dispatch(deleteLanguage({ language }));
+    const confirmDelete = confirm('¿Quieres eliminar ese idioma?');
+    if (confirmDelete) {
+      this.store.dispatch(deleteLanguage({ language }));
+    } else return;
   }
 
   addLanguage() {

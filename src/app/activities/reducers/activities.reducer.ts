@@ -3,7 +3,9 @@ import { Activity } from '../models/activity.model';
 import {
   getActivities,
   getActivitiesSuccess,
-  getActivitiesFailure
+  getActivitiesFailure,
+  updateActivity,
+  cleanActivities
 } from '../actions/activities.actions';
 
 export interface ActivitiesState {
@@ -26,9 +28,9 @@ const _activitiesReducer = createReducer(
 
   on(getActivitiesSuccess, (state, { activities }) => ({
     ...state,
+    activities,
     loading: false,
-    loaded: true,
-    activities
+    loaded: true
   })),
 
   on(getActivitiesFailure, (state, { error }) => ({
@@ -36,6 +38,28 @@ const _activitiesReducer = createReducer(
     loading: false,
     loaded: false,
     error
+  })),
+
+  on(updateActivity, (state, { activityId, activity }) => ({
+    ...state,
+    activities: [
+      ...state.activities.map(act => {
+        if (act.id === activityId) {
+          return { ...activity };
+        } else {
+          return { ...act };
+        }
+      })
+    ],
+    loading: false,
+    loaded: true
+  })),
+
+  on(cleanActivities, state => ({
+    ...state,
+    activities: initialState.activities,
+    loading: false,
+    loaded: true
   }))
 );
 

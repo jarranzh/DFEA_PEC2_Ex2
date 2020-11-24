@@ -1,16 +1,11 @@
-import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/app.reducer';
-import { Activity } from '../models/activity.model';
-import { getActivities } from '../actions/activities.actions';
-import { User } from 'src/app/profile/models/user.model';
-import {
-  getProfile,
-  getProfileFailure
-} from 'src/app/profile/actions/profile.actions';
-import { Profile } from 'src/app/profile/models/profile.model';
 import { LoginState } from 'src/app/login/reducers';
+import { getProfile } from 'src/app/profile/actions/profile.actions';
+import { Profile } from 'src/app/profile/models/profile.model';
+import { getActivities } from '../actions/activities.actions';
+import { Activity } from '../models/activity.model';
 
 @Component({
   selector: 'app-activity-list',
@@ -22,9 +17,9 @@ export class ActivityListComponent implements OnInit {
   login;
   activities: Activity[];
   user: Profile;
-  activity: Activity[];
+  activity: Activity;
 
-  constructor(private store: Store<AppState>, private router: Router) {
+  constructor(private store: Store<AppState>) {
     this.store
       .select('login')
       .subscribe(loginResponse => (this.login = loginResponse.userLogged));
@@ -42,8 +37,6 @@ export class ActivityListComponent implements OnInit {
     }
 
     if (this.login?.email && !this.user) {
-      console.log(this.user);
-      console.log('DISPATCH GET PROFILE');
       this.store.dispatch(getProfile({ email: this.login.email }));
 
       this.store
@@ -83,7 +76,7 @@ export class ActivityListComponent implements OnInit {
     }
   };
 
-  detall(activity: Activity[]) {
+  detall(activity: Activity) {
     this.activity = activity;
   }
 }

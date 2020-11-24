@@ -13,6 +13,9 @@ export const getActivitiesFailure = createAction(
   props<{ error: any }>()
 );
 
-export const getMyActivities = createAction(
-  '[MY-ACTIVITIES] Get My Activities'
+export const updateActivity = createAction(
+  '[ACTIVITIES] Update Activity',
+  props<{ activityId: number; activity: Activity }>()
 );
+
+export const cleanActivities = createAction('[ACTIVITIES] Clean Activities');

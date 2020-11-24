@@ -45,11 +45,11 @@ export class UpdateProfileComponent implements OnInit {
   ) {
     this.store
       .select('login')
-      .subscribe(loginResponse => (this.login = loginResponse.userLogged));
+      .subscribe(response => (this.login = response.userLogged));
 
     this.store
       .select('user')
-      .subscribe(loginResponse => (this.user = loginResponse.userProfile));
+      .subscribe(response => (this.user = response.userProfile));
   }
 
   ngOnInit(): void {

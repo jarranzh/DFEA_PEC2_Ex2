@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { cleanActivities } from './activities/actions/activities.actions';
 import { AppState } from './app.reducer';
 import { logout } from './login/actions/login.actions';
 
@@ -16,6 +17,7 @@ export class AppComponent {
 
   public logout() {
     this.store.dispatch(logout());
+    this.store.dispatch(cleanActivities());
     document.getElementById('logout').style.display = 'none';
     document.getElementById('register').style.display = 'inline';
     document.getElementById('login').style.display = 'inline';

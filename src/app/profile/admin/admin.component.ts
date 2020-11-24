@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { Activity } from 'src/app/activities/models/activity.model';
+import { AppState } from 'src/app/app.reducer';
 import { ActivityService } from 'src/app/Services/activity.service';
-import { UserService } from 'src/app/Services/user.service';
 import { GlobalService } from '../../Services/global.service';
-import { User } from '../models/user.model';
+import { Profile } from '../models/profile.model';
 
 @Component({
   selector: 'app-admin',
@@ -13,28 +14,31 @@ import { User } from '../models/user.model';
 })
 export class AdminComponent implements OnInit {
   activities: Activity[];
-  users: User[];
-  user: User;
+  user: Profile;
+  login;
   activity: Activity;
 
   constructor(
     private _global: GlobalService,
     private router: Router,
     private activityService: ActivityService,
-    private userService: UserService
+    private store: Store<AppState>
   ) {
-    this.user = this._global.globalVar;
+    this.store
+      .select('user')
+      .subscribe(response => (this.user = response.userProfile));
+
+    this.store
+      .select('login')
+      .subscribe(response => (this.login = response.userLogged));
   }
 
   ngOnInit(): void {
-    if (this.user !== undefined) {
-      this.getUsers();
+    if (this.login && this.user) {
       this.getActivities();
+    } else {
+      this.router.navigate(['/']);
     }
-  }
-
-  getUsers(): void {
-    this.userService.getUsers().subscribe(users => (this.users = users));
   }
 
   getActivities(): void {

@@ -9,7 +9,8 @@ import {
   getProfileSuccess,
   updateEducation,
   updateLanguage,
-  updateProfile
+  updateProfile,
+  updateUserActivities
 } from '../actions/profile.actions';
 import { Profile } from '../models/profile.model';
 import { Education, Language } from '../models/user.model';
@@ -68,6 +69,20 @@ const _profileReducer = createReducer(
     loading: false,
     loaded: false,
     error
+  })),
+
+  on(updateUserActivities, (state, { activities }) => ({
+    ...state,
+    userProfile: {
+      ...state.userProfile,
+      activities: [
+        ...state.userProfile.activities.map(act =>
+          activities.find(a => a.id === act.id)
+        )
+      ]
+    },
+    loading: false,
+    loaded: true
   })),
 
   on(updateProfile, (state, { profile }) => ({

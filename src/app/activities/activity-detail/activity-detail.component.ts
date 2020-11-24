@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/app.reducer';
 import { Profile } from 'src/app/profile/models/profile.model';
-import { User } from 'src/app/profile/models/user.model';
 import { ActivityService } from '../../Services/activity.service';
 import { Activity } from '../models/activity.model';
 
@@ -16,7 +15,6 @@ export class ActivityDetailComponent implements OnInit {
   @Input() activity: Activity;
 
   user: Profile;
-  users: User[];
   activities: Activity[];
   constructor(
     private activityService: ActivityService,
@@ -42,12 +40,10 @@ export class ActivityDetailComponent implements OnInit {
   }
 
   registered() {
-    if (this.user !== undefined) {
-      if (this.user.type === 'Tourist') {
-        return true;
-      } else {
-        return false;
-      }
+    if (this.user?.type === 'Tourist') {
+      return true;
+    } else {
+      return false;
     }
   }
 
