@@ -1,11 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { GlobalService } from '../../Services/global.service';
-
-import { ActivityService } from '../../Services/activity.service';
-import { Activity } from 'src/app/Models/activity';
-import { User } from 'src/app/Models/user';
+import { User } from 'src/app/profile/models/user.model';
 import { UserService } from 'src/app/Services/user.service';
+import { ActivityService } from '../../Services/activity.service';
+import { GlobalService } from '../../Services/global.service';
+import { Activity } from '../models/activity.model';
 
 @Component({
   selector: 'app-activity-detail',

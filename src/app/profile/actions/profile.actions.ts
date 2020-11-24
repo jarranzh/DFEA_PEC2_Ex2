@@ -1,9 +1,24 @@
 import { createAction, props } from '@ngrx/store';
 import { Profile } from '../models/profile.model';
-import { Education } from '../models/user.model';
+import { Education, User } from '../models/user.model';
+
+export const getProfile = createAction(
+  '[PROFILE] Get Profile',
+  props<{ email: string }>()
+);
+
+export const getProfileSuccess = createAction(
+  '[PROFILE] Get Profile Success',
+  props<{ userProfile: User }>()
+);
+
+export const getProfileFailure = createAction(
+  '[PROFILE] Get Profile Failure',
+  props<{ error: any }>()
+);
 
 export const updateProfile = createAction(
-  '[PROFILE] Update profile',
+  '[PROFILE] Update Profile',
   props<{ profile: Profile }>()
 );
 

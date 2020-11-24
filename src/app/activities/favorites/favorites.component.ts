@@ -1,7 +1,7 @@
-import { Component, OnInit} from '@angular/core';
-import { User } from '../../Models/user';
-import { Activity } from '../../Models/activity';
+import { Component, OnInit } from '@angular/core';
+import { User } from 'src/app/profile/models/user.model';
 import { GlobalService } from '../../Services/global.service';
+import { Activity } from '../models/activity.model';
 
 @Component({
   selector: 'app-favorites',
@@ -9,18 +9,15 @@ import { GlobalService } from '../../Services/global.service';
   styleUrls: ['./favorites.component.css']
 })
 export class FavoritesComponent implements OnInit {
-
   activities: Activity[];
   user: User;
   activity: Activity[];
 
-  constructor( private _global: GlobalService) {
+  constructor(private _global: GlobalService) {
     this.user = this._global.globalVar;
-
   }
 
   ngOnInit(): void {
-
     if (this.user !== undefined) {
       this.getMyActivities();
     }
@@ -28,13 +25,11 @@ export class FavoritesComponent implements OnInit {
 
   detall(activity) {
     this.activity = activity;
-}
+  }
 
-  getMyActivities(): void{
-
+  getMyActivities(): void {
     const saved = JSON.parse(localStorage.getItem('favorites'));
 
     this.activities = saved;
   }
-
 }

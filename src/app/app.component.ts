@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { GlobalService } from './Services/global.service';
-import { AppState } from './app.reducer';
 import { Store } from '@ngrx/store';
+import { AppState } from './app.reducer';
 import { logout } from './login/actions/login.actions';
 
 @Component({
@@ -11,10 +10,7 @@ import { logout } from './login/actions/login.actions';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  constructor(
-    private router: Router,
-    private store: Store<AppState>
-  ) {}
+  constructor(private router: Router, private store: Store<AppState>) {}
 
   title = 'Travel Agency';
 

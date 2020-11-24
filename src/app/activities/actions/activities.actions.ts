@@ -1,5 +1,5 @@
-import { Activity } from 'src/app/Models/activity';
 import { createAction, props } from '@ngrx/store';
+import { Activity } from '../models/activity.model';
 
 export const getActivities = createAction('[ACTIVITIES] Get Activities');
 

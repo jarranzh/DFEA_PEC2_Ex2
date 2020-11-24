@@ -7,7 +7,7 @@ import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { InMemoryDataService } from './Services/in-memory-data.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MessagesComponent } from './messages/messages.component';
-import { AdminComponent } from './components/admin/admin.component';
+import { AdminComponent } from './profile/admin/admin.component';
 import { LoginModule } from './login/login.module';
 import { ProfileModule } from './profile/profile.module';
 import { ActivitiesModule } from './activities/activities.module';
@@ -18,6 +18,9 @@ import { UserService } from './Services/user.service';
 import { appReducers } from './app.reducer';
 import { EffectsModule } from '@ngrx/effects';
 import { EffectsArray } from './login/effects';
+import { LoginService } from './login/services/login.service';
+import { RegisterService } from './login/services/register.service';
+import { ProfileService } from './profile/services/profile.service';
 
 @NgModule({
   declarations: [AppComponent, MessagesComponent, AdminComponent],
@@ -39,7 +42,7 @@ import { EffectsArray } from './login/effects';
       logOnly: environment.production // Restrict extension to log-only mode
     })
   ],
-  providers: [UserService],
+  providers: [UserService, LoginService, RegisterService, ProfileService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

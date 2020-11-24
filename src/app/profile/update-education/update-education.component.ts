@@ -19,7 +19,7 @@ import { updateEducation } from '../actions/profile.actions';
 })
 export class UpdateEducationComponent implements OnInit {
   users: User[];
-
+  login;
   public user: User;
   public _education: Education;
 
@@ -67,10 +67,8 @@ export class UpdateEducationComponent implements OnInit {
     });
 
     this.store
-      .select('userLogged')
-      .subscribe(
-        userLoggedResponse => (this.user = userLoggedResponse.userLogged)
-      );
+      .select('login')
+      .subscribe(loginResponse => (this.login = loginResponse.userLogged));
     console.log(this.user);
   }
 

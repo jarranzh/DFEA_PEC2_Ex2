@@ -1,109 +1,123 @@
-
 <div *ngIf="user != undefined">
-<h2>PROFILE</h2>
-<div>
-    <label>Name: 
-    <input type="text" value="{{user.name}}" readonly/>
-</label>
-</div>
-<div>
-    <label>Surname:
-        <input type="text" value="{{user.surname}}" readonly/>
+  <h2>PROFILE</h2>
+  <div>
+    <label
+      >Name:
+      <input type="text" value="{{ user.name }}" readonly />
     </label>
-</div>
-<div>
-<label>Birth date:
-<input type="text" value="{{user.birthDate}}" readonly/>
-</label>
-
-</div>
-<div>
-<label>Phone:
-    <input type="text" value=" {{user.phone}}" readonly/>
-</label>
-</div>
-<div>
-<label>Nationality
-<input type="text" value="{{user.nationality}}" readonly/>
-</label>         
-</div>
-<div>
-<label>NIF:
-     <input type="text" value="{{user.nif}}" readonly/>
-</label>
-</div>
-<div>
-<label>About me:
-    <input type="text" value="{{user.aboutMe}}" readonly/>
-</label>
-</div>
-<div *ngIf="company">
-<label>Company name:
-    <input type="text" value="{{user.companyName}}" readonly/>
-</label>
-</div>
-<div *ngIf="company">
-    <label>Company description:
-        <input type="text" value="{{user.companyDescription}}" readonly/>
+  </div>
+  <div>
+    <label
+      >Surname:
+      <input type="text" value="{{ user.surname }}" readonly />
     </label>
-</div>
-<div *ngIf="company">
-    <label>CIF:
-        <input type="text" value="{{user.cif}}" readonly/>
+  </div>
+  <div>
+    <label
+      >Birth date:
+      <input type="text" value="{{ user.birthDate }}" readonly />
     </label>
-</div>
-            
-<button type="button" (click)="updateProfile()">UPDATE PROFILE INFORMATION</button>
+  </div>
+  <div>
+    <label
+      >Phone:
+      <input type="text" value=" {{ user.phone }}" readonly />
+    </label>
+  </div>
+  <div>
+    <label
+      >Nationality
+      <input type="text" value="{{ user.nationality }}" readonly />
+    </label>
+  </div>
+  <div>
+    <label
+      >NIF:
+      <input type="text" value="{{ user.nif }}" readonly />
+    </label>
+  </div>
+  <div>
+    <label
+      >About me:
+      <input type="text" value="{{ user.aboutMe }}" readonly />
+    </label>
+  </div>
+  <div *ngIf="company">
+    <label
+      >Company name:
+      <input type="text" value="{{ user.companyName }}" readonly />
+    </label>
+  </div>
+  <div *ngIf="company">
+    <label
+      >Company description:
+      <input type="text" value="{{ user.companyDescription }}" readonly />
+    </label>
+  </div>
+  <div *ngIf="company">
+    <label
+      >CIF:
+      <input type="text" value="{{ user.cif }}" readonly />
+    </label>
+  </div>
 
-<!-- Education -->
+  <button type="button" (click)="updateProfile()">
+    UPDATE PROFILE INFORMATION
+  </button>
 
-<h2>EDUCATION</h2>
-    <table>
-        <thead>
-            <tr>
-            <th>TYPE</th>
-            <th>LEVEL</th>
-            <th>NAME</th>
-            <th>UNIVERSITY</th>
-            <th>FINISH DATE</th>
-            <th>ACTIONS</th>
-        </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let education of educations">
-                <th>{{education.type}}</th>
-                <th>{{education.level}}</th>
-                <th>{{education.name}}</th>
-                <th>{{education.university}}</th>
-                <th>{{education.finishDate}}</th>
-                <th><button (click)="updateEducation(education)">UPDATE</button><button (click)="deleteEducation(education)">DELETE</button></th>
-            </tr>
-        </tbody>
-    </table>
-    <button (click)="addEducation()">NEW EDUCATION</button>
+  <!-- Education -->
 
-<!-- Languages -->
+  <h2>EDUCATION</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>TYPE</th>
+        <th>LEVEL</th>
+        <th>NAME</th>
+        <th>UNIVERSITY</th>
+        <th>FINISH DATE</th>
+        <th>ACTIONS</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let education of educations">
+        <th>{{ education.type }}</th>
+        <th>{{ education.level }}</th>
+        <th>{{ education.name }}</th>
+        <th>{{ education.university }}</th>
+        <th>{{ education.finishDate }}</th>
+        <th>
+          <button (click)="updateEducation(education)">UPDATE</button
+          ><button (click)="deleteEducation(education)">DELETE</button>
+        </th>
+      </tr>
+    </tbody>
+  </table>
+  <button (click)="addEducation()">NEW EDUCATION</button>
 
-<h2>LANGUAGES</h2>
-    <table>
-        <thead>
-            <tr>
-            <th>LEVEL</th>
-            <th>LANGUAGE</th>
-            <th>FINISH DATE</th>
-            <th>ACTIONS</th>
-        </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let _language of _languages">
-                <th>{{_language.level}}</th>
-                <th>{{_language.language}}</th>
-                <th>{{_language.finishDate}}</th>
-                <th><button (click)="updateLanguage(_language)">UPDATE</button><button (click)="deleteLanguage(_language)">DELETE</button></th>
-            </tr>
-        </tbody>
-    </table>
-    <button (click)="addLanguage()">NEW LANGUAGE</button>
+  <!-- Languages -->
 
-
+  <h2>LANGUAGES</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>LEVEL</th>
+        <th>LANGUAGE</th>
+        <th>FINISH DATE</th>
+        <th>ACTIONS</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let language of languages">
+        <th>{{ language.level }}</th>
+        <th>{{ language.language }}</th>
+        <th>{{ language.finishDate }}</th>
+        <th>
+          <button (click)="updateLanguage(language)">UPDATE</button
+          ><button (click)="deleteLanguage(language)">DELETE</button>
+        </th>
+      </tr>
+    </tbody>
+  </table>
+  <button (click)="addLanguage()">NEW LANGUAGE</button>
 </div>
