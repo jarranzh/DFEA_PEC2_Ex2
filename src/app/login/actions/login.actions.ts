@@ -7,12 +7,12 @@ export const login = createAction(
 );
 
 export const loginSuccess = createAction(
-  '[LOGIN] Login success',
+  '[LOGIN] Login Success',
   props<{ email: string; password: string; userType: string }>()
 );
 
 export const loginFailure = createAction(
-  '[LOGIN] Login failure',
+  '[LOGIN] Login Failure',
   props<{ error: any }>()
 );
 

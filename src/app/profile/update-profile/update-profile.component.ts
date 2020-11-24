@@ -12,6 +12,7 @@ import { AppState } from 'src/app/app.reducer';
 import { Store } from '@ngrx/store';
 import { User } from '../models/user.model';
 import { updateProfile } from '../actions/profile.actions';
+import { Profile } from '../models/profile.model';
 
 @Component({
   selector: 'app-update-profile',
@@ -21,7 +22,7 @@ import { updateProfile } from '../actions/profile.actions';
 export class UpdateProfileComponent implements OnInit {
   users: User[];
   login;
-  public user: User = new User();
+  public user: Profile;
 
   public name: FormControl;
   public surname: FormControl;
@@ -45,6 +46,10 @@ export class UpdateProfileComponent implements OnInit {
     this.store
       .select('login')
       .subscribe(loginResponse => (this.login = loginResponse.userLogged));
+
+    this.store
+      .select('user')
+      .subscribe(loginResponse => (this.user = loginResponse.userProfile));
   }
 
   ngOnInit(): void {
@@ -140,7 +145,7 @@ export class UpdateProfileComponent implements OnInit {
   }
 
   getProfile() {
-    if (this.user.type === 'Company') {
+    if (this.login.type === 'Company') {
       return (this.company = true);
     } else {
       return (this.company = false);

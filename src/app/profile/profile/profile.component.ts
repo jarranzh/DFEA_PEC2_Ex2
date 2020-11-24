@@ -4,6 +4,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/app.reducer';
 import { GlobalService } from '../../Services/global.service';
 import { deleteEducation } from '../actions/profile.actions';
+import { Profile } from '../models/profile.model';
 import { Education, Languages, User } from '../models/user.model';
 
 @Component({
@@ -14,12 +15,10 @@ import { Education, Languages, User } from '../models/user.model';
 export class ProfileComponent implements OnInit {
   login;
   educations: Education[];
-  _languages: Languages[];
-  users: User[];
-  user: User;
-  education: Education;
+  languages: Languages[];
+  user: Profile;
+  // education: Education;
   company: boolean;
-  languages: Languages;
 
   constructor(
     private _global: GlobalService,
@@ -29,10 +28,15 @@ export class ProfileComponent implements OnInit {
     this.store
       .select('login')
       .subscribe(loginResponse => (this.login = loginResponse.userLogged));
+
+    this.store
+      .select('user')
+      .subscribe(loginResponse => (this.user = loginResponse.userProfile));
   }
 
   ngOnInit(): void {
-    if (this.user) {
+    console.log(this.login);
+    if (this.login) {
       this.getEducations();
       this.getLanguages();
       this.getProfile();
@@ -42,7 +46,7 @@ export class ProfileComponent implements OnInit {
   }
 
   getProfile() {
-    if (this.user.type === 'Company') {
+    if (this.login.type === 'Company') {
       return (this.company = true);
     } else {
       return (this.company = false);
@@ -50,11 +54,18 @@ export class ProfileComponent implements OnInit {
   }
 
   getEducations(): void {
-    this.educations = this.user.education;
+    this.store
+      .select('user')
+      .subscribe(loginResponse => (this.educations = loginResponse.education));
+
+    console.log(this.educations);
   }
 
   getLanguages(): void {
-    this._languages = this.user.languages;
+    this.store
+      .select('user')
+      .subscribe(loginResponse => (this.languages = loginResponse.languages));
+    console.log(this.languages);
   }
 
   updateProfile() {
@@ -67,7 +78,7 @@ export class ProfileComponent implements OnInit {
   }
 
   deleteEducation(education) {
-    const array = this.user.education;
+    // const array = this.user.education;
     this.store.dispatch(deleteEducation({ education }));
 
     // for (let i = 0; i < array.length; i++) {
@@ -90,16 +101,15 @@ export class ProfileComponent implements OnInit {
   }
 
   deleteLanguage(_language) {
-    const array = this.user.languages;
-
-    for (let i = 0; i < array.length; i++) {
-      if (
-        array[i].language === _language.language &&
-        array[i].level === _language.level
-      ) {
-        array.splice(i, 1);
-      }
-    }
+    // const array = this.user.languages;
+    // for (let i = 0; i < array.length; i++) {
+    //   if (
+    //     array[i].language === _language.language &&
+    //     array[i].level === _language.level
+    //   ) {
+    //     array.splice(i, 1);
+    //   }
+    // }
   }
 
   addLanguage() {

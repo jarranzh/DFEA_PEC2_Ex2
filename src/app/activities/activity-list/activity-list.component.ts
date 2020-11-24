@@ -25,7 +25,11 @@ export class ActivityListComponent implements OnInit {
   userProfile: Profile;
   activity: Activity[];
 
-  constructor(private store: Store<AppState>, private router: Router) {}
+  constructor(private store: Store<AppState>, private router: Router) {
+    this.store
+      .select('login')
+      .subscribe(loginResponse => (this.login = loginResponse.userLogged));
+  }
 
   ngOnInit(): void {
     this.store
@@ -42,10 +46,10 @@ export class ActivityListComponent implements OnInit {
       .select('user')
       .subscribe(userResponse => (this.userProfile = userResponse.userProfile));
 
-    if (this.login.email) {
+    if (this.login?.email && !this.userProfile) {
       console.log(this.user);
       console.log('DISPATCH GET PROFILE');
-      this.store.dispatch(getProfile({ email: this.user.email }));
+      this.store.dispatch(getProfile({ email: this.login.email }));
     }
     this.setPageHeader();
   }
@@ -55,10 +59,6 @@ export class ActivityListComponent implements OnInit {
   }
 
   public setPageHeader = () => {
-    this.store
-      .select('login')
-      .subscribe(loginResponse => (this.login = loginResponse.userLogged));
-
     console.log(this.login);
     if (this.login?.userType === 'Tourist') {
       document.getElementById('logout').style.display = 'inline';
