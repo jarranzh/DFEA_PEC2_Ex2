@@ -19,7 +19,7 @@ export class User {
   activities?: Activity[];
   favorites?: Activity[];
   education?: Education[];
-  languages?: Languages[];
+  languages?: Language[];
 }
 
 export class Education {
@@ -30,7 +30,7 @@ export class Education {
   finishDate: string;
 }
 
-export class Languages {
+export class Language {
   level: string;
   language: string;
   finishDate: string;

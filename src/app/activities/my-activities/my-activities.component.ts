@@ -23,7 +23,7 @@ export class MyActivitiesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (!this.user) {
+    if (!this.login) {
       this.router.navigate(['/home']);
     } else {
       this.getMyActivities();
@@ -35,6 +35,10 @@ export class MyActivitiesComponent implements OnInit {
   }
 
   getMyActivities(): void {
-    this.activities = this.user.activities;
+    this.store
+      .select('user')
+      .subscribe(
+        userResponse => (this.activities = userResponse.userProfile.activities)
+      );
   }
 }

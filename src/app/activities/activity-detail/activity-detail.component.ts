@@ -1,9 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { AppState } from 'src/app/app.reducer';
+import { Profile } from 'src/app/profile/models/profile.model';
 import { User } from 'src/app/profile/models/user.model';
-import { UserService } from 'src/app/Services/user.service';
 import { ActivityService } from '../../Services/activity.service';
-import { GlobalService } from '../../Services/global.service';
 import { Activity } from '../models/activity.model';
 
 @Component({
@@ -14,20 +15,20 @@ import { Activity } from '../models/activity.model';
 export class ActivityDetailComponent implements OnInit {
   @Input() activity: Activity;
 
-  user: User;
+  user: Profile;
   users: User[];
   activities: Activity[];
   constructor(
-    private userService: UserService,
     private activityService: ActivityService,
-    private _globalService: GlobalService,
-    private router: Router
+    private router: Router,
+    private store: Store<AppState>
   ) {
-    this.user = this._globalService.globalVar;
+    this.store
+      .select('user')
+      .subscribe(response => (this.user = response.userProfile));
   }
 
   ngOnInit(): void {
-    this.getUsers();
     if (this.user !== undefined) {
       this.registered();
     }
@@ -35,14 +36,14 @@ export class ActivityDetailComponent implements OnInit {
   }
 
   getActivities(): void {
-    this.activityService
-      .getActivities()
-      .subscribe(activities => (this.activities = activities));
+    this.store
+      .select('activities')
+      .subscribe(response => (this.activities = response.activities));
   }
 
   registered() {
-    if (this._globalService.globalVar !== undefined) {
-      if (this._globalService.globalVar.type === 'Tourist') {
+    if (this.user !== undefined) {
+      if (this.user.type === 'Tourist') {
         return true;
       } else {
         return false;
@@ -74,10 +75,6 @@ export class ActivityDetailComponent implements OnInit {
     } else {
       return false;
     }
-  }
-
-  getUsers(): void {
-    this.userService.getUsers().subscribe(users => (this.users = users));
   }
 
   favorite() {

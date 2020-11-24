@@ -1,20 +1,23 @@
 import { createReducer, on } from '@ngrx/store';
 import {
   addEducation,
+  addLanguage,
   deleteEducation,
+  deleteLanguage,
   getProfile,
   getProfileFailure,
   getProfileSuccess,
   updateEducation,
+  updateLanguage,
   updateProfile
 } from '../actions/profile.actions';
 import { Profile } from '../models/profile.model';
-import { Education, Languages } from '../models/user.model';
+import { Education, Language } from '../models/user.model';
 
 export interface ProfileState {
   userProfile: Profile;
   education: Education[];
-  languages: Languages[];
+  languages: Language[];
   loading: boolean;
   loaded: boolean;
   error: any;
@@ -44,6 +47,7 @@ const _profileReducer = createReducer(
     userProfile: {
       name: userProfile.name,
       surname: userProfile.surname,
+      type: userProfile.type,
       birthDate: userProfile.birthDate,
       phone: userProfile.phone,
       nationality: userProfile.nationality,
@@ -51,7 +55,8 @@ const _profileReducer = createReducer(
       aboutMe: userProfile.aboutMe,
       companyName: userProfile.companyName,
       companyDescription: userProfile.companyDescription,
-      cif: userProfile.cif
+      cif: userProfile.cif,
+      activities: userProfile.activities
     },
     loading: false,
     loaded: true,
@@ -72,17 +77,17 @@ const _profileReducer = createReducer(
     userProfile: { ...profile }
   })),
 
-  on(updateEducation, (state, { education }) => ({
+  on(updateEducation, (state, { selectedEducation, newEducation }) => ({
     ...state,
     loading: false,
     loaded: true,
     education: [
-      // Hago la actualización de educación según la solución de Tània Garcia, que es de la que parto.
-      // En mi solución de la PEC1 puse un id a cada Education para identificarla y edita cualquier campo.
-      // En este caso no podrímos modificar ni nombre ni nivel.
       ...state.education.map(edu => {
-        if (edu.name === education.name && edu.level === education.level) {
-          return { ...education };
+        if (
+          edu.name === selectedEducation.name &&
+          edu.level === selectedEducation.level
+        ) {
+          return { ...newEducation };
         } else {
           return { ...edu };
         }
@@ -97,21 +102,64 @@ const _profileReducer = createReducer(
     education: [...state.education, education]
   })),
 
-  on(deleteEducation, (state, { education }) => ({
+  on(deleteEducation, (state, { education }) => {
+    const educations = [...state.education];
+    [...state.education].map((edu, index) => {
+      if (edu.name === education.name && edu.level === education.level) {
+        educations.splice(index, 1);
+      } else {
+        return { ...edu };
+      }
+    });
+    return {
+      ...state,
+      loading: false,
+      loaded: true,
+      education: [...educations]
+    };
+  }),
+
+  on(updateLanguage, (state, { selectedLanguage, newLanguage }) => ({
     ...state,
     loading: false,
     loaded: true,
-    education: [
-      ...state.education.map(edu => {
-        if (edu.name === education.name && edu.level === education.level) {
-          //fix this return
-          return null;
+    languages: [
+      ...state.languages.map(lan => {
+        if (
+          lan.language === selectedLanguage.language &&
+          lan.level === selectedLanguage.level
+        ) {
+          return { ...newLanguage };
         } else {
-          return { ...edu };
+          return { ...lan };
         }
       })
     ]
-  }))
+  })),
+
+  on(addLanguage, (state, { language }) => ({
+    ...state,
+    loading: false,
+    loaded: true,
+    languages: [...state.languages, language]
+  })),
+
+  on(deleteLanguage, (state, { language }) => {
+    const languages = [...state.languages];
+    [...state.languages].map((lan, index) => {
+      if (lan.language === language.language && lan.level === language.level) {
+        languages.splice(index, 1);
+      } else {
+        return { ...lan };
+      }
+    });
+    return {
+      ...state,
+      loading: false,
+      loaded: true,
+      languages: [...languages]
+    };
+  })
 );
 
 export function profileReducer(state, action) {

@@ -6,9 +6,11 @@ import {
   Validators
 } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { AppState } from 'src/app/app.reducer';
 import { GlobalService } from 'src/app/Services/global.service';
-import { UserService } from 'src/app/Services/user.service';
-import { Languages, User } from '../models/user.model';
+import { updateLanguage } from '../actions/profile.actions';
+import { Language, User } from '../models/user.model';
 
 @Component({
   selector: 'app-update-language',
@@ -19,7 +21,7 @@ export class UpdateLanguageComponent implements OnInit {
   users: User[];
 
   public user: User;
-  public _language: Languages;
+  public _language: Language;
 
   public level: FormControl;
   public language: FormControl;
@@ -30,10 +32,9 @@ export class UpdateLanguageComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
-    private userService: UserService,
-    private _global: GlobalService
+    private _global: GlobalService,
+    private store: Store<AppState>
   ) {
-    this.user = this._global.globalVar;
     this._language = this._global.globalLanguage;
   }
 
@@ -53,27 +54,34 @@ export class UpdateLanguageComponent implements OnInit {
       language: this.language,
       finishDate: this.finishDate
     });
-    this.getUsers();
+    // this.getUsers();
   }
 
-  getUsers(): void {
-    this.userService.getUsers().subscribe(users => (this.users = users));
-  }
+  // getUsers(): void {
+  //   this.userService.getUsers().subscribe(users => (this.users = users));
+  // }
 
   updateLanguage() {
-    const form = this.languageForm.value as Languages;
+    const form = this.languageForm.value as Language;
+    //TODO: modify updateLanguage({selectedLanguage, newLanguage}),
+    this.store.dispatch(
+      updateLanguage({
+        selectedLanguage: this._language,
+        newLanguage: { ...form }
+      })
+    );
 
-    const array = this.user.languages;
+    // const array = this.user.languages;
 
-    for (let i = 0; i < array.length; i++) {
-      if (
-        array[i].language === this._language.language &&
-        array[i].level === this._language.level
-      ) {
-        array.splice(i, 1);
-      }
-    }
-    this.user.languages = [...this.user.languages, form];
+    // for (let i = 0; i < array.length; i++) {
+    //   if (
+    //     array[i].language === this._language.language &&
+    //     array[i].level === this._language.level
+    //   ) {
+    //     array.splice(i, 1);
+    //   }
+    // }
+    // this.user.languages = [...this.user.languages, form];
 
     this.router.navigateByUrl('/profile');
   }

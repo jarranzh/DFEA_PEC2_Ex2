@@ -6,9 +6,12 @@ import {
   Validators
 } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { AppState } from 'src/app/app.reducer';
 import { GlobalService } from 'src/app/Services/global.service';
 import { UserService } from 'src/app/Services/user.service';
-import { Languages, User } from '../models/user.model';
+import { addLanguage } from '../actions/profile.actions';
+import { Language, User } from '../models/user.model';
 
 @Component({
   selector: 'app-add-language',
@@ -19,7 +22,7 @@ export class AddLanguageComponent implements OnInit {
   users: User[];
 
   public user: User;
-  public _language: Languages;
+  public _language: Language;
 
   public level: FormControl;
   public language: FormControl;
@@ -31,9 +34,10 @@ export class AddLanguageComponent implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router,
     private userService: UserService,
-    private _global: GlobalService
+    private _global: GlobalService,
+    private store: Store<AppState>
   ) {
-    this.user = this._global.globalVar;
+    // this.user = this._global.globalVar;
     this._language = this._global.globalLanguage;
   }
 
@@ -47,24 +51,25 @@ export class AddLanguageComponent implements OnInit {
       language: this.language,
       finishDate: this.finishDate
     });
-    this.getUsers();
+    // this.getUsers();
   }
 
-  getUsers(): void {
-    this.userService.getUsers().subscribe(users => (this.users = users));
-  }
+  // getUsers(): void {
+  //   this.userService.getUsers().subscribe(users => (this.users = users));
+  // }
 
   addLanguage() {
-    const form = this.addLanguageForm.value as Languages;
+    const form = this.addLanguageForm.value as Language;
+    this.store.dispatch(addLanguage({ language: form }));
+    this.router.navigateByUrl('/profile');
 
-    if (this.user.languages !== undefined) {
-      this.user.languages = [...this.user.languages, form];
+    // if (this.user.languages !== undefined) {
+    //   this.user.languages = [...this.user.languages, form];
 
-      this.router.navigateByUrl('/profile');
-    } else {
-      this.user.languages = [form];
+    //   this.router.navigateByUrl('/profile');
+    // } else {
+    //   this.user.languages = [form];
 
-      this.router.navigateByUrl('/profile');
-    }
+    // }
   }
 }

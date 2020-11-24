@@ -1,6 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { Profile } from '../models/profile.model';
-import { Education, User } from '../models/user.model';
+import { Education, Language, User } from '../models/user.model';
 
 export const getProfile = createAction(
   '[PROFILE] Get Profile',
@@ -24,7 +24,7 @@ export const updateProfile = createAction(
 
 export const updateEducation = createAction(
   '[EDUCATION] Update Education',
-  props<{ education: Education }>()
+  props<{ selectedEducation: Education; newEducation: Education }>()
 );
 
 export const addEducation = createAction(
@@ -35,4 +35,19 @@ export const addEducation = createAction(
 export const deleteEducation = createAction(
   '[EDUCATION] Delete Education',
   props<{ education: Education }>()
+);
+
+export const updateLanguage = createAction(
+  '[LANGUAGE] Update Language',
+  props<{ selectedLanguage: Language; newLanguage: Language }>()
+);
+
+export const addLanguage = createAction(
+  '[LANGUAGE] Add Language',
+  props<{ language: Language }>()
+);
+
+export const deleteLanguage = createAction(
+  '[LANGUAGE] Delete Language',
+  props<{ language: Language }>()
 );

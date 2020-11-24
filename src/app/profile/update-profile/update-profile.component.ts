@@ -169,6 +169,7 @@ export class UpdateProfileComponent implements OnInit {
         profile: {
           name: form.name,
           surname: form.surname,
+          type: this.user.type,
           birthDate: form.birthDate,
           phone: form.phone,
           nationality: form.nationality,
@@ -176,7 +177,8 @@ export class UpdateProfileComponent implements OnInit {
           aboutMe: form.aboutMe,
           companyName: form.companyName,
           companyDescription: form.companyDescription,
-          cif: form.cif
+          cif: form.cif,
+          activities: this.user.activities
         }
       })
     );

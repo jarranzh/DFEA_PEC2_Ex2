@@ -1,9 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { AppState } from 'src/app/app.reducer';
+import { Profile } from 'src/app/profile/models/profile.model';
 import { User } from 'src/app/profile/models/user.model';
-import { UserService } from 'src/app/Services/user.service';
 import { ActivityService } from '../../Services/activity.service';
-import { GlobalService } from '../../Services/global.service';
 import { Activity } from '../models/activity.model';
 
 @Component({
@@ -14,32 +15,32 @@ import { Activity } from '../models/activity.model';
 export class MyActivitiesDetailsComponent implements OnInit {
   @Input() activity: Activity;
 
-  user: User;
+  user: Profile;
   users: User[];
   activities: Activity[];
   constructor(
-    private userService: UserService,
     private activityService: ActivityService,
     private router: Router,
-    private _globalService: GlobalService
+    private store: Store<AppState>
   ) {
-    this.user = this._globalService.globalVar;
+    this.store
+      .select('user')
+      .subscribe(response => (this.user = response.userProfile));
   }
 
   ngOnInit(): void {
-    this.getUsers();
     this.registered();
     this.getActivities();
   }
 
   getActivities(): void {
-    this.activityService
-      .getActivities()
-      .subscribe(activities => (this.activities = activities));
+    this.store
+      .select('activities')
+      .subscribe(response => (this.activities = response.activities));
   }
 
   registered() {
-    return this._globalService.globalVar !== undefined;
+    return this.user !== undefined;
   }
 
   subscribed(activity) {
@@ -50,10 +51,6 @@ export class MyActivitiesDetailsComponent implements OnInit {
         return true;
       }
     }
-  }
-
-  getUsers(): void {
-    this.userService.getUsers().subscribe(users => (this.users = users));
   }
 
   signUp(activity) {

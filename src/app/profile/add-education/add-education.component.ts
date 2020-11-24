@@ -1,17 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import {
+  FormBuilder,
   FormControl,
   FormGroup,
-  FormBuilder,
   Validators
 } from '@angular/forms';
-import { UserService } from 'src/app/Services/user.service';
 import { Router } from '@angular/router';
-import { GlobalService } from 'src/app/Services/global.service';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/app.reducer';
-import { User, Education } from '../models/user.model';
+import { GlobalService } from 'src/app/Services/global.service';
 import { addEducation } from '../actions/profile.actions';
+import { Profile } from '../models/profile.model';
+import { Education, User } from '../models/user.model';
 
 @Component({
   selector: 'app-add-education',
@@ -19,9 +19,8 @@ import { addEducation } from '../actions/profile.actions';
   styleUrls: ['./add-education.component.css']
 })
 export class AddEducationComponent implements OnInit {
-  users: User[];
   login;
-  public user: User;
+  public user: Profile;
   public _education: Education;
 
   public type: FormControl;
@@ -35,11 +34,12 @@ export class AddEducationComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
-    private userService: UserService,
     private _global: GlobalService,
     private store: Store<AppState>
   ) {
-    this.user = this._global.globalVar;
+    this.store
+      .select('user')
+      .subscribe(response => (this.user = response.userProfile));
     this._education = this._global.globalEducation;
   }
 

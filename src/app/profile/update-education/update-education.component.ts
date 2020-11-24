@@ -69,12 +69,16 @@ export class UpdateEducationComponent implements OnInit {
     this.store
       .select('login')
       .subscribe(loginResponse => (this.login = loginResponse.userLogged));
-    console.log(this.user);
   }
 
   updateEducation() {
     const form = this.educationForm.value as Education;
-    this.store.dispatch(updateEducation({ education: { ...form } }));
+    this.store.dispatch(
+      updateEducation({
+        selectedEducation: this._education,
+        newEducation: { ...form }
+      })
+    );
     this.router.navigateByUrl('/profile');
   }
 

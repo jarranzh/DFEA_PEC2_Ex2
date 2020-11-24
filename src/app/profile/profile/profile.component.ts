@@ -3,9 +3,9 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/app.reducer';
 import { GlobalService } from '../../Services/global.service';
-import { deleteEducation } from '../actions/profile.actions';
+import { deleteEducation, deleteLanguage } from '../actions/profile.actions';
 import { Profile } from '../models/profile.model';
-import { Education, Languages, User } from '../models/user.model';
+import { Education, Language, User } from '../models/user.model';
 
 @Component({
   selector: 'app-profile',
@@ -15,7 +15,7 @@ import { Education, Languages, User } from '../models/user.model';
 export class ProfileComponent implements OnInit {
   login;
   educations: Education[];
-  languages: Languages[];
+  languages: Language[];
   user: Profile;
   // education: Education;
   company: boolean;
@@ -78,38 +78,20 @@ export class ProfileComponent implements OnInit {
   }
 
   deleteEducation(education) {
-    // const array = this.user.education;
     this.store.dispatch(deleteEducation({ education }));
-
-    // for (let i = 0; i < array.length; i++) {
-    //   if (
-    //     array[i].name === education.name &&
-    //     array[i].level === education.level
-    //   ) {
-    //     array.splice(i, 1);
-    //   }
-    // }
   }
 
   addEducation() {
     this.router.navigateByUrl('/addEducation');
   }
 
-  updateLanguage(_language) {
-    this._global.globalLanguage = _language;
+  updateLanguage(language) {
+    this._global.globalLanguage = language;
     this.router.navigateByUrl('/updateLanguage');
   }
 
-  deleteLanguage(_language) {
-    // const array = this.user.languages;
-    // for (let i = 0; i < array.length; i++) {
-    //   if (
-    //     array[i].language === _language.language &&
-    //     array[i].level === _language.level
-    //   ) {
-    //     array.splice(i, 1);
-    //   }
-    // }
+  deleteLanguage(language) {
+    this.store.dispatch(deleteLanguage({ language }));
   }
 
   addLanguage() {
