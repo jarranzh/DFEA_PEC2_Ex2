@@ -1,36 +1,37 @@
-
-
 <h2>ACTIVITIES</h2>
 <table>
-    <thead>
-        <tr>
-            <th>NAME</th>
-            <th>CATEGORY</th>
-            <th>SUBCATEGORY</th>
-            <th>DESCRIPTION</th>
-            <th>LANGUAGE</th>
-            <th>DATE</th>
-            <th>PRICE</th>
-            <th>MINIUM CAPACITY</th>
-            <th>LIMIT CAPACITY</th>
-            <th>STATE</th>
-            <th>ACTIONS</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let activity of activities">
-            <th>{{activity.name}}</th>
-            <th>{{activity.category}}</th>
-            <th>{{activity.subcategory}}</th>
-            <th>{{activity.description}}</th>
-            <th>{{activity.language}}</th>
-            <th>{{activity.date}}</th>
-            <th>{{activity.price}}</th>
-            <th>{{activity.minCapacity}}</th>
-            <th>{{activity.limitCapacity}}</th>
-            <th>{{activity.state}}</th>
-            <th><button (click)="updateActivity(activity)">UPDATE</button><button (click)="deleteActivity(activity)">DELETE</button></th>
-        </tr>
-    </tbody>
+  <thead>
+    <tr>
+      <th>NAME</th>
+      <th>CATEGORY</th>
+      <th>SUBCATEGORY</th>
+      <th>DESCRIPTION</th>
+      <th>LANGUAGE</th>
+      <th>DATE</th>
+      <th>PRICE</th>
+      <th>MINIUM CAPACITY</th>
+      <th>LIMIT CAPACITY</th>
+      <th>STATE</th>
+      <th>ACTIONS</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let activity of userActivities">
+      <th>{{ activity.name }}</th>
+      <th>{{ activity.category }}</th>
+      <th>{{ activity.subcategory }}</th>
+      <th>{{ activity.description }}</th>
+      <th>{{ activity.language }}</th>
+      <th>{{ activity.date }}</th>
+      <th>{{ activity.price }}</th>
+      <th>{{ activity.minCapacity }}</th>
+      <th>{{ activity.limitCapacity }}</th>
+      <th>{{ activity.state }}</th>
+      <th>
+        <button (click)="updateActivity(activity)">UPDATE</button>
+        <button (click)="deleteActivity(activity)">DELETE</button>
+      </th>
+    </tr>
+  </tbody>
 </table>
 <button (click)="addActivity()">NEW ACTIVITY</button>

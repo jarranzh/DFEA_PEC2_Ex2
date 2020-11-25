@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { deleteActivity } from 'src/app/activities/actions/activities.actions';
 import { Activity } from 'src/app/activities/models/activity.model';
 import { AppState } from 'src/app/app.reducer';
 import { ActivityService } from 'src/app/Services/activity.service';
 import { GlobalService } from '../../Services/global.service';
+import { updateUserActivities } from '../actions/profile.actions';
 import { Profile } from '../models/profile.model';
 
 @Component({
@@ -13,6 +15,7 @@ import { Profile } from '../models/profile.model';
   styleUrls: ['./admin.component.css']
 })
 export class AdminComponent implements OnInit {
+  userActivities: Activity[];
   activities: Activity[];
   user: Profile;
   login;
@@ -21,28 +24,42 @@ export class AdminComponent implements OnInit {
   constructor(
     private _global: GlobalService,
     private router: Router,
-    private activityService: ActivityService,
     private store: Store<AppState>
   ) {
-    this.store
-      .select('user')
-      .subscribe(response => (this.user = response.userProfile));
-
-    this.store
-      .select('login')
-      .subscribe(response => (this.login = response.userLogged));
+    this.getLogin();
+    this.getUser();
   }
 
   ngOnInit(): void {
     if (this.login && this.user) {
-      this.getActivities();
+      this.getUserActivities();
     } else {
       this.router.navigate(['/']);
     }
   }
 
+  getLogin(): void {
+    this.store
+      .select('login')
+      .subscribe(response => (this.login = response.userLogged));
+  }
+
+  getUser(): void {
+    this.store
+      .select('user')
+      .subscribe(response => (this.user = response.userProfile));
+  }
+
+  getUserActivities(): void {
+    this.userActivities = this.user.activities;
+  }
+
   getActivities(): void {
-    this.activities = this.user.activities;
+    this.store
+      .select('activities')
+      .subscribe(
+        activitiesResponse => (this.activities = activitiesResponse.activities)
+      );
   }
 
   updateActivity(activity) {
@@ -51,15 +68,15 @@ export class AdminComponent implements OnInit {
   }
 
   deleteActivity(activity: Activity): void {
-    const array = this.user.activities;
-
-    for (let i = 0; i < array.length; i++) {
-      if (array[i].id === activity.id) {
-        array.splice(i, 1);
-      }
+    const confirmDelete = confirm('¿Quieres eliminar esta actividad?');
+    if (confirmDelete) {
+      this.store.dispatch(deleteActivity({ activityId: activity.id }));
+      this.getActivities();
+      this.store.dispatch(
+        updateUserActivities({ activities: this.activities })
+      );
+      this.getUserActivities();
     }
-    this.activities = this.activities.filter(a => a !== activity);
-    this.activityService.deleteActivity(activity).subscribe();
   }
 
   addActivity() {

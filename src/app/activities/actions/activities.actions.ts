@@ -18,4 +18,14 @@ export const updateActivity = createAction(
   props<{ activityId: number; activity: Activity }>()
 );
 
+export const deleteActivity = createAction(
+  '[ACTIVITIES] Delete Activity',
+  props<{ activityId: number }>()
+);
+
+export const addActivity = createAction(
+  '[ACTIVITIES] Add Activity',
+  props<{ activity: Activity }>()
+);
+
 export const cleanActivities = createAction('[ACTIVITIES] Clean Activities');

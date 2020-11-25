@@ -76,9 +76,9 @@ const _profileReducer = createReducer(
     userProfile: {
       ...state.userProfile,
       activities: [
-        ...state.userProfile.activities.map(act =>
-          activities.find(a => a.id === act.id)
-        )
+        ...state.userProfile.activities
+          .map(act => activities.find(a => a.id === act.id))
+          .filter(e => e)
       ]
     },
     loading: false,

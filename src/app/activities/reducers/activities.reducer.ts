@@ -5,7 +5,9 @@ import {
   getActivitiesSuccess,
   getActivitiesFailure,
   updateActivity,
-  cleanActivities
+  cleanActivities,
+  deleteActivity,
+  addActivity
 } from '../actions/activities.actions';
 
 export interface ActivitiesState {
@@ -53,6 +55,16 @@ const _activitiesReducer = createReducer(
     ],
     loading: false,
     loaded: true
+  })),
+
+  on(deleteActivity, (state, { activityId }) => ({
+    ...state,
+    activities: [...state.activities.filter(act => act.id !== activityId)]
+  })),
+
+  on(addActivity, (state, { activity }) => ({
+    ...state,
+    activities: [...state.activities, activity]
   })),
 
   on(cleanActivities, state => ({
