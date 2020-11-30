@@ -41,8 +41,6 @@ export class ActivityListComponent implements OnInit {
     }
 
     if (this.login?.email && !this.user) {
-      console.log('LOGIN',this.login);
-      console.log('USER',this.user);
       this.store.dispatch(getProfile({ email: this.login.email }));
 
       this.setPageHeader();
@@ -58,7 +56,6 @@ export class ActivityListComponent implements OnInit {
     //TODO: sacar info userProfile y hacer estos if con (this.user?.type)
     if (this.login?.userType === 'Tourist') {
       console.log('tourist');
-
       document.getElementById('logout').style.display = 'inline';
       document.getElementById('home').style.display = 'inline';
       document.getElementById('favorites').style.display = 'inline';
@@ -68,7 +65,6 @@ export class ActivityListComponent implements OnInit {
       document.getElementById('register').style.display = 'none';
     } else if (this.login?.userType === 'Company') {
       console.log('Company');
-
       document.getElementById('logout').style.display = 'inline';
       document.getElementById('login').style.display = 'none';
       document.getElementById('register').style.display = 'none';

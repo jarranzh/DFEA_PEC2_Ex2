@@ -4,7 +4,6 @@ import { Store } from '@ngrx/store';
 import { deleteActivity } from 'src/app/activities/actions/activities.actions';
 import { Activity } from 'src/app/activities/models/activity.model';
 import { AppState } from 'src/app/app.reducer';
-import { ActivityService } from 'src/app/Services/activity.service';
 import { GlobalService } from '../../Services/global.service';
 import { updateUserActivities } from '../actions/profile.actions';
 import { Profile } from '../models/profile.model';

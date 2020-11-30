@@ -15,7 +15,7 @@ export class ProfileService {
   getProfile(email: string): Observable<User> {
     return this.http.get<User[]>(this.usersUrl).pipe(
       map(response => {
-        console.log(response);
+        console.log('users:', response);
         return response.find(u => u.email === email);
       })
     );

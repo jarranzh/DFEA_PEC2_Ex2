@@ -6,9 +6,9 @@ import {
   getActivities,
   getActivitiesFailure,
   getActivitiesSuccess,
-  updateActivity,
   subscribeActivity,
-  unsubscribeActivity
+  unsubscribeActivity,
+  updateActivity
 } from '../actions/activities.actions';
 import { Activity } from '../models/activity.model';
 

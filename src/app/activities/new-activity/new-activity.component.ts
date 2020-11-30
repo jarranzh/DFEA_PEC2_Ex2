@@ -10,7 +10,6 @@ import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/app.reducer';
 import { User } from 'src/app/profile/models/user.model';
 import { GlobalService } from 'src/app/Services/global.service';
-import { UserService } from 'src/app/Services/user.service';
 import { ActivityService } from '../../Services/activity.service';
 import { addActivity } from '../actions/activities.actions';
 import { Activity } from '../models/activity.model';
@@ -91,9 +90,6 @@ export class NewActivityComponent implements OnInit {
   }
 
   getActivities(): void {
-    // this.activityService
-    //   .getActivities()
-    //   .subscribe(activities => (this.activities = activities));
     this.store
       .select('activities')
       .subscribe(
@@ -112,18 +108,7 @@ export class NewActivityComponent implements OnInit {
         : 1;
 
     this.store.dispatch(addActivity({ activity: form }));
-    //TODO: update userActivities to show new activity in admin panel
     this.router.navigateByUrl('/admin');
-
-    // this.activityService.addActivity(form).subscribe(activity => {
-    //   this.activities.push(activity);
-    //   if (this.user.activities === undefined) {
-    //     this.user.activities = [form];
-    //   } else {
-    //     this.user.activities = [...this.user.activities, form];
-    //   }
-    //   this.router.navigateByUrl('/admin');
-    // });
   }
 
   calculateState() {

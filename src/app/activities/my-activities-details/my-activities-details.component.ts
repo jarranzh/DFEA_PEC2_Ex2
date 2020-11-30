@@ -1,20 +1,18 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/app.reducer';
+import {
+  subscribeUserToActivity,
+  unsubscribeUserFromActivity,
+  updateUserActivities
+} from 'src/app/profile/actions/profile.actions';
 import { Profile } from 'src/app/profile/models/profile.model';
 import { User } from 'src/app/profile/models/user.model';
-import { ActivityService } from '../../Services/activity.service';
-import { Activity } from '../models/activity.model';
-import {
-  updateUserActivities,
-  subscribeUserToActivity,
-  unsubscribeUserFromActivity
-} from 'src/app/profile/actions/profile.actions';
 import {
   subscribeActivity,
   unsubscribeActivity
 } from '../actions/activities.actions';
+import { Activity } from '../models/activity.model';
 
 @Component({
   selector: 'app-my-activities-details',
@@ -24,22 +22,31 @@ import {
 export class MyActivitiesDetailsComponent implements OnInit {
   @Input() activity: Activity;
 
+  act: Activity;
   user: Profile;
   users: User[];
   activities: Activity[];
-  constructor(
-    private activityService: ActivityService,
-    private router: Router,
-    private store: Store<AppState>
-  ) {
+  constructor(private store: Store<AppState>) {
     this.store
       .select('user')
       .subscribe(response => (this.user = response.userProfile));
+    this.getActivities();
   }
 
   ngOnInit(): void {
     this.registered();
-    this.getActivities();
+    if (this.activities && this.activity) {
+      console.log(this.activity);
+      this.store
+        .select('activities')
+        .subscribe(
+          response =>
+            (this.act = response.activities.find(
+              a => a.id === this.activity.id
+            ))
+        );
+      console.log('ACT', this.act);
+    }
   }
 
   getActivities(): void {

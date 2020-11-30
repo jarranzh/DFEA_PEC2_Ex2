@@ -2,11 +2,17 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/app.reducer';
+import {
+  subscribeUserToActivity,
+  unsubscribeUserFromActivity,
+  updateUserActivities
+} from 'src/app/profile/actions/profile.actions';
 import { Profile } from 'src/app/profile/models/profile.model';
-import { ActivityService } from '../../Services/activity.service';
+import {
+  subscribeActivity,
+  unsubscribeActivity
+} from '../actions/activities.actions';
 import { Activity } from '../models/activity.model';
-import { updateUserActivities, subscribeUserToActivity, unsubscribeUserFromActivity } from 'src/app/profile/actions/profile.actions';
-import { subscribeActivity, unsubscribeActivity } from '../actions/activities.actions';
 
 @Component({
   selector: 'app-activity-detail',
@@ -19,35 +25,34 @@ export class ActivityDetailComponent implements OnInit {
   act: Activity;
   user: Profile;
   activities: Activity[];
-  constructor(
-    private activityService: ActivityService,
-    private router: Router,
-    private store: Store<AppState>
-  ) {
+  constructor(private router: Router, private store: Store<AppState>) {
     console.log('input activity', this.activity);
     this.store
       .select('user')
       .subscribe(response => (this.user = response.userProfile));
+    this.store
+      .select('activities')
+      .subscribe(response => (this.activities = response.activities));
   }
 
   ngOnInit(): void {
     if (this.user !== undefined) {
       this.registered();
     }
-    this.getActivities();
-    if(this.activities && this.activity){
+    if (this.activities && this.activity) {
+      //TODO: pass this.act instead of this.activity to the html template.
+      //Problem: when is this this condition true?
       console.log(this.activity);
       this.store
-      .select('activities')
-      .subscribe(response => (this.act = response.activities.find(a => a.id === this.activity.id)));
-
+        .select('activities')
+        .subscribe(
+          response =>
+            (this.act = response.activities.find(
+              a => a.id === this.activity.id
+            ))
+        );
+      console.log('ACT', this.act);
     }
-  }
-
-  getActivities(): void {
-    this.store
-      .select('activities')
-      .subscribe(response => (this.activities = response.activities));
   }
 
   registered() {
@@ -60,6 +65,7 @@ export class ActivityDetailComponent implements OnInit {
 
   subscribed(activity) {
     const array = this.user.activities;
+    console.log('user activities', this.user.activities);
 
     if (array !== undefined) {
       for (let i = 0; i < array.length; i++) {
@@ -121,35 +127,9 @@ export class ActivityDetailComponent implements OnInit {
   }
 
   signUp(activity) {
-    this.store.dispatch(subscribeUserToActivity({activity}));
-    this.store.dispatch(subscribeActivity({activity}));
-    this.getActivities();
-    this.store.dispatch(updateUserActivities({activities: this.activities}));
-    // this.activities = this.activities.filter(a => a !== activity);
-    // this.activityService.deleteActivity(activity).subscribe();
-
-    // const registrats = activity.peopleRegistered + 1;
-
-    // activity.peopleRegistered = registrats;
-
-    // const limit = activity.limitCapacity;
-
-    // if (registrats === limit) {
-    //   activity.state = 'Complete';
-    // }
-
-    // this.activityService.addActivity(activity).subscribe(activity => {
-    //   this.activities.push(activity);
-    //   this.activities = [...this.activities, activity];
-    //   this.router.navigateByUrl('/login', { skipLocationChange: true });
-    //   return this.router.navigateByUrl('/activityList');
-    // });
-
-    // if (this.user.activities !== undefined) {
-    //   this.user.activities = [...this.user.activities, activity];
-    // } else {
-    //   this.user.activities = [activity];
-    // }
+    this.store.dispatch(subscribeUserToActivity({ activity }));
+    this.store.dispatch(subscribeActivity({ activity }));
+    this.store.dispatch(updateUserActivities({ activities: this.activities }));
   }
 
   unsubscribe(activity) {
@@ -157,31 +137,5 @@ export class ActivityDetailComponent implements OnInit {
       unsubscribeUserFromActivity({ activityId: activity.id })
     );
     this.store.dispatch(unsubscribeActivity({ activity }));
-
-    // const array = this.user.activities;
-
-    // for (let i = 0; i < array.length; i++) {
-    //   if (array[i].id === activity.id) {
-    //     array.splice(i, 1);
-    //   }
-    // }
-
-    // this.activities = this.activities.filter(a => a !== activity);
-    // this.activityService.deleteActivity(activity).subscribe();
-
-    // if (activity.peopleRegistered === activity.limitCapacity) {
-    //   activity.state = 'Places available';
-    // }
-
-    // const registrats = activity.peopleRegistered - 1;
-
-    // activity.peopleRegistered = registrats;
-
-    // this.activityService.addActivity(activity).subscribe(activity => {
-    //   this.activities.push(activity);
-    //   this.activities = [...this.activities, activity];
-    //   this.router.navigateByUrl('/login', { skipLocationChange: true });
-    //   return this.router.navigateByUrl('/activityList');
-    // });
   }
 }

@@ -10,10 +10,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/app.reducer';
 import { updateUserActivities } from 'src/app/profile/actions/profile.actions';
 import { Profile } from 'src/app/profile/models/profile.model';
-import { User } from 'src/app/profile/models/user.model';
 import { GlobalService } from 'src/app/Services/global.service';
-import { UserService } from 'src/app/Services/user.service';
-import { ActivityService } from '../../Services/activity.service';
 import { updateActivity } from '../actions/activities.actions';
 import { Activity } from '../models/activity.model';
 @Component({
@@ -24,7 +21,6 @@ import { Activity } from '../models/activity.model';
 export class UpdateActivityComponent implements OnInit {
   public user: Profile;
   login;
-  // users: User[];
   activities: Activity[];
 
   public activity: Activity;
@@ -45,10 +41,8 @@ export class UpdateActivityComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private userService: UserService,
     private _global: GlobalService,
     private formBuilder: FormBuilder,
-    private activityService: ActivityService,
     private store: Store<AppState>
   ) {
     this.store
@@ -140,23 +134,6 @@ export class UpdateActivityComponent implements OnInit {
 
     this.store.dispatch(updateUserActivities({ activities: this.activities }));
     this.router.navigateByUrl('/admin');
-
-    // const array = this.user.activities;
-
-    // for (let i = 0; i < array.length; i++) {
-    //   if (array[i].id === this.activity.id) {
-    //     array.splice(i, 1);
-    //   }
-    // }
-
-    // this.activities = this.activities.filter(a => a !== this.activity);
-    // this.activityService.deleteActivity(this.activity).subscribe();
-
-    // this.activityService.addActivity(form).subscribe(form => {
-    //   this.activities.push(form);
-    //   this.user.activities = [...this.user.activities, form];
-    //   this.router.navigateByUrl('/admin');
-    // });
   }
 
   calculateState() {

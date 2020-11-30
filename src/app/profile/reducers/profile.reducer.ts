@@ -2,18 +2,18 @@ import { createReducer, on } from '@ngrx/store';
 import {
   addEducation,
   addLanguage,
+  cleanUser,
   deleteEducation,
   deleteLanguage,
   getProfile,
   getProfileFailure,
   getProfileSuccess,
+  subscribeUserToActivity,
+  unsubscribeUserFromActivity,
   updateEducation,
   updateLanguage,
   updateProfile,
-  updateUserActivities,
-  cleanUser,
-  subscribeUserToActivity,
-  unsubscribeUserFromActivity
+  updateUserActivities
 } from '../actions/profile.actions';
 import { Profile } from '../models/profile.model';
 import { Education, Language } from '../models/user.model';

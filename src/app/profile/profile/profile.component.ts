@@ -5,7 +5,7 @@ import { AppState } from 'src/app/app.reducer';
 import { GlobalService } from '../../Services/global.service';
 import { deleteEducation, deleteLanguage } from '../actions/profile.actions';
 import { Profile } from '../models/profile.model';
-import { Education, Language, User } from '../models/user.model';
+import { Education, Language } from '../models/user.model';
 
 @Component({
   selector: 'app-profile',
