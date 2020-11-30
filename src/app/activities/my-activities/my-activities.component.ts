@@ -14,7 +14,7 @@ export class MyActivitiesComponent implements OnInit {
   login;
   activities: Activity[];
   user: User;
-  activity: Activity[];
+  activity: Activity;
 
   constructor(private router: Router, private store: Store<AppState>) {
     this.store
@@ -30,15 +30,14 @@ export class MyActivitiesComponent implements OnInit {
     }
   }
 
-  detall(activity) {
-    this.activity = activity;
-  }
-
   getMyActivities(): void {
     this.store
       .select('user')
       .subscribe(
         userResponse => (this.activities = userResponse.userProfile.activities)
       );
+  }
+  detall(activity) {
+    this.activity = this.activities.find(act => act.id === activity.id);
   }
 }

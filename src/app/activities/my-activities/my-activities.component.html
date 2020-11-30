@@ -1,29 +1,31 @@
 <div class="list">
-    <h2>ACTIVITIES LIST</h2>
-    <table>
-        <thead>
-            <tr>
-            <th>NAME</th>
-            <th>CATEGORY</th>
-            <th>PRICE</th>
-            <th>LANGUAGE</th>
-            <th>DATE</th>
-            <th>ACTIONS</th>
-        </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let activity of activities">
-                <th>{{activity.name}}</th>
-                <th>{{activity.category}}</th>
-                <th>{{activity.price}}</th>
-                <th>{{activity.language}}</th>
-                <th>{{activity.date}}</th>
-                <th><button (click)="detall(activity)">Detall</button></th>
-            </tr>
-        </tbody>
-    </table>
+  <h2>ACTIVITIES LIST</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>NAME</th>
+        <th>CATEGORY</th>
+        <th>PRICE</th>
+        <th>LANGUAGE</th>
+        <th>DATE</th>
+        <th>ACTIONS</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let activity of activities">
+        <th>{{ activity.name }}</th>
+        <th>{{ activity.category }}</th>
+        <th>{{ activity.price }}</th>
+        <th>{{ activity.language }}</th>
+        <th>{{ activity.date }}</th>
+        <th><button (click)="detall(activity)">Detall</button></th>
+      </tr>
+    </tbody>
+  </table>
 </div>
 
 <div class="detail">
-    <app-my-activities-details [activity]="activity"></app-my-activities-details>
+  <app-my-activities-details
+    [activity]="activity"
+  ></app-my-activities-details>
 </div>

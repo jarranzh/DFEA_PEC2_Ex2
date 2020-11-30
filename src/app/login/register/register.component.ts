@@ -83,10 +83,11 @@ export class RegisterComponent implements OnInit {
   checkRegister() {
     this.store.dispatch(
       register({
-        register: {
+        user: {
+          id: new Date().getTime(),
           name: this.name.value,
           surname: this.surname.value,
-          userType: this.type.value,
+          type: this.type.value,
           email: this.email.value,
           password: this.password.value,
           repeatPassword: this.repeatPassword.value

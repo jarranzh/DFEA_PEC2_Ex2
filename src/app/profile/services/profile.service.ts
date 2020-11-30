@@ -13,8 +13,11 @@ export class ProfileService {
   constructor(private http: HttpClient) {}
 
   getProfile(email: string): Observable<User> {
-    return this.http
-      .get<User[]>(this.usersUrl)
-      .pipe(map(response => response.find(u => u.email === email)));
+    return this.http.get<User[]>(this.usersUrl).pipe(
+      map(response => {
+        console.log(response);
+        return response.find(u => u.email === email);
+      })
+    );
   }
 }

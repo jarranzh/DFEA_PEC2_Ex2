@@ -44,16 +44,17 @@ export class LoginEffects {
     this.actions$.pipe(
       ofType(register),
       mergeMap(action =>
-        this.registerService.checkRegister(action.register).pipe(
+        this.registerService.checkRegister(action.user).pipe(
           map(user => {
             if (user) {
               return loginFailure({ error: 'ESTE EMAIL YA EXISTE EN LA BD' });
             } else {
+              this.registerService.addUser(action.user);
               this.router.navigate(['activityList']);
               return loginSuccess({
-                email: action.register.email,
-                password: action.register.password,
-                userType: user.type
+                email: action.user.email,
+                password: action.user.password,
+                userType: action.user.type
               });
             }
           }),

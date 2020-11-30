@@ -4,8 +4,10 @@ import { Registration } from '../models/register.model';
 
 export const register = createAction(
   '[REGISTER] Register',
-  props<{ register: Registration }>()
+  props<{ user: User }>()
 );
+
+//export const
 
 // export const registerSuccess = createAction(
 //   '[REGISTER] Register success',

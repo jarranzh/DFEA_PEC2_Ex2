@@ -28,4 +28,14 @@ export const addActivity = createAction(
   props<{ activity: Activity }>()
 );
 
+export const subscribeActivity = createAction(
+  '[ACTIVITIES] SUBSCRIPTION: Calculate Capacity of Activity',
+  props<{ activity: Activity }>()
+);
+
+export const unsubscribeActivity = createAction(
+  '[ACTIVITIES] UNSUBSCRIPTION: Calculate Capacity of Activity',
+  props<{ activity: Activity }>()
+);
+
 export const cleanActivities = createAction('[ACTIVITIES] Clean Activities');

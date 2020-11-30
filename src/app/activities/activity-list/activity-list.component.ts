@@ -23,6 +23,10 @@ export class ActivityListComponent implements OnInit {
     this.store
       .select('login')
       .subscribe(loginResponse => (this.login = loginResponse.userLogged));
+
+    this.store
+      .select('user')
+      .subscribe(userResponse => (this.user = userResponse.userProfile));
   }
 
   ngOnInit(): void {
@@ -37,11 +41,9 @@ export class ActivityListComponent implements OnInit {
     }
 
     if (this.login?.email && !this.user) {
+      console.log('LOGIN',this.login);
+      console.log('USER',this.user);
       this.store.dispatch(getProfile({ email: this.login.email }));
-
-      this.store
-        .select('user')
-        .subscribe(userResponse => (this.user = userResponse.userProfile));
 
       this.setPageHeader();
     }
@@ -77,6 +79,7 @@ export class ActivityListComponent implements OnInit {
   };
 
   detall(activity: Activity) {
-    this.activity = activity;
+    this.activity = this.activities.find(act => act.id === activity.id);
+    console.log('detall', this.activity);
   }
 }

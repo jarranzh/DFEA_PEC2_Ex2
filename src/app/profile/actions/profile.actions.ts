@@ -18,6 +18,11 @@ export const getProfileFailure = createAction(
   props<{ error: any }>()
 );
 
+export const updateUserActivities = createAction(
+  '[PROFILE] Update User Activities',
+  props<{ activities: Activity[] }>()
+);
+
 export const updateProfile = createAction(
   '[PROFILE] Update Profile',
   props<{ profile: Profile }>()
@@ -53,7 +58,14 @@ export const deleteLanguage = createAction(
   props<{ language: Language }>()
 );
 
-export const updateUserActivities = createAction(
-  '[PROFILE] Update User Activities',
-  props<{ activities: Activity[] }>()
+export const unsubscribeUserFromActivity = createAction(
+  '[PROFILE] Unsubscribe from Activity',
+  props<{ activityId: number }>()
 );
+
+export const subscribeUserToActivity = createAction(
+  '[PROFILE] Subscribe User to Activity',
+  props<{ activity: Activity }>()
+);
+
+export const cleanUser = createAction('[PROFILE] Clean User Profile');

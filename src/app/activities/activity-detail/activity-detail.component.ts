@@ -5,6 +5,8 @@ import { AppState } from 'src/app/app.reducer';
 import { Profile } from 'src/app/profile/models/profile.model';
 import { ActivityService } from '../../Services/activity.service';
 import { Activity } from '../models/activity.model';
+import { updateUserActivities, subscribeUserToActivity, unsubscribeUserFromActivity } from 'src/app/profile/actions/profile.actions';
+import { subscribeActivity, unsubscribeActivity } from '../actions/activities.actions';
 
 @Component({
   selector: 'app-activity-detail',
@@ -14,6 +16,7 @@ import { Activity } from '../models/activity.model';
 export class ActivityDetailComponent implements OnInit {
   @Input() activity: Activity;
 
+  act: Activity;
   user: Profile;
   activities: Activity[];
   constructor(
@@ -21,6 +24,7 @@ export class ActivityDetailComponent implements OnInit {
     private router: Router,
     private store: Store<AppState>
   ) {
+    console.log('input activity', this.activity);
     this.store
       .select('user')
       .subscribe(response => (this.user = response.userProfile));
@@ -31,6 +35,13 @@ export class ActivityDetailComponent implements OnInit {
       this.registered();
     }
     this.getActivities();
+    if(this.activities && this.activity){
+      console.log(this.activity);
+      this.store
+      .select('activities')
+      .subscribe(response => (this.act = response.activities.find(a => a.id === this.activity.id)));
+
+    }
   }
 
   getActivities(): void {
@@ -110,58 +121,67 @@ export class ActivityDetailComponent implements OnInit {
   }
 
   signUp(activity) {
-    this.activities = this.activities.filter(a => a !== activity);
-    this.activityService.deleteActivity(activity).subscribe();
+    this.store.dispatch(subscribeUserToActivity({activity}));
+    this.store.dispatch(subscribeActivity({activity}));
+    this.getActivities();
+    this.store.dispatch(updateUserActivities({activities: this.activities}));
+    // this.activities = this.activities.filter(a => a !== activity);
+    // this.activityService.deleteActivity(activity).subscribe();
 
-    const registrats = activity.peopleRegistered + 1;
+    // const registrats = activity.peopleRegistered + 1;
 
-    activity.peopleRegistered = registrats;
+    // activity.peopleRegistered = registrats;
 
-    const limit = activity.limitCapacity;
+    // const limit = activity.limitCapacity;
 
-    if (registrats === limit) {
-      activity.state = 'Complete';
-    }
+    // if (registrats === limit) {
+    //   activity.state = 'Complete';
+    // }
 
-    this.activityService.addActivity(activity).subscribe(activity => {
-      this.activities.push(activity);
-      this.activities = [...this.activities, activity];
-      this.router.navigateByUrl('/login', { skipLocationChange: true });
-      return this.router.navigateByUrl('/activityList');
-    });
+    // this.activityService.addActivity(activity).subscribe(activity => {
+    //   this.activities.push(activity);
+    //   this.activities = [...this.activities, activity];
+    //   this.router.navigateByUrl('/login', { skipLocationChange: true });
+    //   return this.router.navigateByUrl('/activityList');
+    // });
 
-    if (this.user.activities !== undefined) {
-      this.user.activities = [...this.user.activities, activity];
-    } else {
-      this.user.activities = [activity];
-    }
+    // if (this.user.activities !== undefined) {
+    //   this.user.activities = [...this.user.activities, activity];
+    // } else {
+    //   this.user.activities = [activity];
+    // }
   }
 
   unsubscribe(activity) {
-    const array = this.user.activities;
+    this.store.dispatch(
+      unsubscribeUserFromActivity({ activityId: activity.id })
+    );
+    this.store.dispatch(unsubscribeActivity({ activity }));
 
-    for (let i = 0; i < array.length; i++) {
-      if (array[i].id === activity.id) {
-        array.splice(i, 1);
-      }
-    }
+    // const array = this.user.activities;
 
-    this.activities = this.activities.filter(a => a !== activity);
-    this.activityService.deleteActivity(activity).subscribe();
+    // for (let i = 0; i < array.length; i++) {
+    //   if (array[i].id === activity.id) {
+    //     array.splice(i, 1);
+    //   }
+    // }
 
-    if (activity.peopleRegistered === activity.limitCapacity) {
-      activity.state = 'Places available';
-    }
+    // this.activities = this.activities.filter(a => a !== activity);
+    // this.activityService.deleteActivity(activity).subscribe();
 
-    const registrats = activity.peopleRegistered - 1;
+    // if (activity.peopleRegistered === activity.limitCapacity) {
+    //   activity.state = 'Places available';
+    // }
 
-    activity.peopleRegistered = registrats;
+    // const registrats = activity.peopleRegistered - 1;
 
-    this.activityService.addActivity(activity).subscribe(activity => {
-      this.activities.push(activity);
-      this.activities = [...this.activities, activity];
-      this.router.navigateByUrl('/login', { skipLocationChange: true });
-      return this.router.navigateByUrl('/activityList');
-    });
+    // activity.peopleRegistered = registrats;
+
+    // this.activityService.addActivity(activity).subscribe(activity => {
+    //   this.activities.push(activity);
+    //   this.activities = [...this.activities, activity];
+    //   this.router.navigateByUrl('/login', { skipLocationChange: true });
+    //   return this.router.navigateByUrl('/activityList');
+    // });
   }
 }

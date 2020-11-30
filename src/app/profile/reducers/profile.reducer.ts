@@ -10,7 +10,10 @@ import {
   updateEducation,
   updateLanguage,
   updateProfile,
-  updateUserActivities
+  updateUserActivities,
+  cleanUser,
+  subscribeUserToActivity,
+  unsubscribeUserFromActivity
 } from '../actions/profile.actions';
 import { Profile } from '../models/profile.model';
 import { Education, Language } from '../models/user.model';
@@ -69,6 +72,28 @@ const _profileReducer = createReducer(
     loading: false,
     loaded: false,
     error
+  })),
+
+  on(unsubscribeUserFromActivity, (state, { activityId }) => ({
+    ...state,
+    userProfile: {
+      ...state.userProfile,
+      activities: state.userProfile.activities.filter(
+        act => act.id !== activityId
+      )
+    },
+    loading: false,
+    loaded: true
+  })),
+
+  on(subscribeUserToActivity, (state, { activity }) => ({
+    ...state,
+    userProfile: {
+      ...state.userProfile,
+      activities: [...state.userProfile.activities, activity]
+    },
+    loading: false,
+    loaded: true
   })),
 
   on(updateUserActivities, (state, { activities }) => ({
@@ -174,7 +199,16 @@ const _profileReducer = createReducer(
       loaded: true,
       languages: [...languages]
     };
-  })
+  }),
+
+  on(cleanUser, state => ({
+    ...state,
+    userProfile: initialState.userProfile,
+    education: initialState.education,
+    languages: initialState.languages,
+    loading: false,
+    loaded: true
+  }))
 );
 
 export function profileReducer(state, action) {

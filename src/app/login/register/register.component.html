@@ -39,7 +39,7 @@
             <input type="text" [formControl]="email"/>
             <span style="color: red;" *ngIf="(registerForm.get('email').errors && (registerForm.get('email').touched) || registerForm.get('email').dirty) ">
                 <span *ngIf="registerForm.get('email').errors?.required">User email is required</span>
-                <span *ngIf="registerForm.get('email').errors?.pattern"> User email must be like name@domin.com</span>
+                <span *ngIf="registerForm.get('email').errors?.pattern"> User email must be like name@domain.com</span>
             </span>
         </div>
 
